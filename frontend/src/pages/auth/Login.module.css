@@ -1,0 +1,184 @@
+/* ── Shared auth page layout ───────────────────────────────────── */
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    background: var(--bg-primary);
+}
+
+.cardWrap {
+    width: 100%;
+    max-width: 440px;
+}
+
+/* ── Brand ─────────────────────────────────────────────────────── */
+.brand {
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+/* ── Heading ───────────────────────────────────────────────────── */
+.heading {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2);
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ── Form ──────────────────────────────────────────────────────── */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+}
+
+.labelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+/* Input wrapper with icon */
+.inputWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputWrapError .input {
+    border-color: var(--danger, #f87171);
+}
+
+.inputIcon {
+    position: absolute;
+    left: var(--space-3);
+    color: var(--text-muted);
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.input {
+    width: 100%;
+    padding: var(--space-3) var(--space-3) var(--space-3) calc(var(--space-3) * 2 + 18px);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.input::placeholder {
+    color: var(--text-muted);
+}
+
+.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.inputError {
+    border-color: var(--danger, #f87171);
+}
+
+.inputError:focus {
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+}
+
+.errorMsg {
+    font-size: 0.82rem;
+    color: var(--danger, #f87171);
+    margin: 0;
+}
+
+/* ── Forgot link ───────────────────────────────────────────────── */
+.forgotLink {
+    font-size: 0.82rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.forgotLink:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* ── Divider ───────────────────────────────────────────────────── */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-6) 0;
+}
+
+.dividerLine {
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.dividerText {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+.footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.footerLink {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footerLink:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
