@@ -80,7 +80,7 @@ export default function Dashboard() {
                             fullWidth
                             onClick={() => navigate('/resume-analysis')}
                         >
-                            Improve Resume
+                            Analyze Resume
                         </Button>
                     </Card>
 
