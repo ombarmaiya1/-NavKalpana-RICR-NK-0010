@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import Landing from './pages/landing/Landing';
 import Dashboard from './pages/learning/Dashboard';
 import InterviewPage from './pages/interview/InterviewPage';
 import MockInterviewStart from './pages/interview/MockInterviewStart';
@@ -20,8 +21,8 @@ export default function App() {
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
-          {/* Default: open to StudentDashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* Landing page at root */}
+          <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/mock-interview" element={<MockInterviewStart />} />
           <Route path="/interview" element={<InterviewPage />} />
