@@ -1,29 +1,31 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
-import Navbar from './layouts/Navbar';
 import Dashboard from './pages/learning/Dashboard';
 import MockInterviewStart from './pages/interview/MockInterviewStart';
 import './index.css';
 
 /**
- * App — root component.
- * Wrap all page content with <ThemeProvider> so every child
- * can access useTheme(). Navbar is placed at the top-level
- * layout; individual page routes go below the Navbar.
+ * App — root router.
+ * ThemeProvider wraps everything so every component (MainLayout,
+ * Navbar, ThemeToggle) can access useTheme().
+ *
+ * Add more <Route> entries here as new pages are built.
+ * The base path "/" redirects immediately to the Dashboard.
  */
-function App() {
+export default function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <Navbar />
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          {/* Default: open to StudentDashboard */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/mock-interview" element={<MockInterviewStart />} />
+
+          {/* 404 fallback → also goes to dashboard */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
-
-export default App;
