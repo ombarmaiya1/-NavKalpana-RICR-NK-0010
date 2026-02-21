@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import StudentDashboard from './pages/learning/Dashboard';
+import ResumeAnalysis from './pages/learning/ResumeAnalysis';
 import './index.css';
 
 /**
@@ -14,6 +15,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<StudentDashboard />} />
+          <Route path="/resume-analysis" element={<ResumeAnalysis />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

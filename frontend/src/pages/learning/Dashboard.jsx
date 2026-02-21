@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -28,6 +29,8 @@ const masteryTopics = [
 ];
 
 export default function Dashboard() {
+    const navigate = useNavigate();
+
     const getHeatmapColor = (percent) => {
         // Return an rgba value based on percentage
         // Low percent = more red/orange, High percent = more green/blue
@@ -71,7 +74,12 @@ export default function Dashboard() {
                         </div>
                         <div className={styles.scoreVal} style={{ color: 'var(--accent)' }}>72<span style={{ fontSize: '1.5rem', color: 'var(--text-muted)' }}>/100</span></div>
                         <p className={styles.textMuted}>Add 2 more backend projects to boost your score.</p>
-                        <Button variant="secondary" leftIcon={<FileText size={18} />} fullWidth>
+                        <Button
+                            variant="secondary"
+                            leftIcon={<FileText size={18} />}
+                            fullWidth
+                            onClick={() => navigate('/resume-analysis')}
+                        >
                             Improve Resume
                         </Button>
                     </Card>
