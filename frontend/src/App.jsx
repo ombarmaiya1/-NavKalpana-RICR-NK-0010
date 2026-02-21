@@ -3,6 +3,8 @@ import { ThemeProvider } from './context/ThemeContext';
 import Dashboard from './pages/learning/Dashboard';
 import InterviewPage from './pages/interview/InterviewPage';
 import MockInterviewStart from './pages/interview/MockInterviewStart';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
 import './index.css';
 
 /**
@@ -23,6 +25,8 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/mock-interview" element={<MockInterviewStart />} />
           <Route path="/interview" element={<InterviewPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
           {/* 404 fallback → also goes to dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
