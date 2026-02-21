@@ -1,3 +1,4 @@
+import ThemeToggle from '../components/ui/ThemeToggle';
 import styles from './Navbar.module.css';
 
 /**
@@ -25,6 +26,9 @@ export default function Navbar({ pageTitle = '', actions, collapsed = false }) {
                 {actions && (
                     <div className={styles.actions}>{actions}</div>
                 )}
+
+                {/* Theme Toggle */}
+                <ThemeToggle />
 
                 {/* Notification Bell */}
                 <button
