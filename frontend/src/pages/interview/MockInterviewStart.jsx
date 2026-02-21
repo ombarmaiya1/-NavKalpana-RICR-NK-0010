@@ -20,7 +20,7 @@ const MockInterviewStart = () => {
 
                 {/* SECTION 2: Interview Setup Card */}
                 <section>
-                    <Card variant="bordered" className={styles.setupCard}>
+                    <Card variant="glass" className={styles.setupCard}>
                         <h2 className={styles.sectionTitle}>Interview Setup</h2>
 
                         <div className={styles.formGrid}>
@@ -77,32 +77,32 @@ const MockInterviewStart = () => {
                 <section className={styles.summarySection}>
                     <h2 className={styles.sectionTitle}>Previous Interview Summary</h2>
                     <div className={styles.metricsGrid}>
-                        <Card variant="default" className={styles.metricCard}>
+                        <Card variant="glass" className={styles.metricCard}>
                             <span className={styles.metricLabel}>Last Score</span>
                             <span className={styles.metricValueLarge}>85/100</span>
                         </Card>
-                        <Card variant="default" className={styles.metricCard}>
+                        <Card variant="glass" className={styles.metricCard}>
                             <BrainCircuit className={styles.iconTech} size={24} />
                             <div className={styles.formGroup} style={{ gap: '4px' }}>
                                 <span className={styles.metricLabel}>Tech Depth</span>
                                 <span className={styles.metricValue}>Good</span>
                             </div>
                         </Card>
-                        <Card variant="default" className={styles.metricCard}>
+                        <Card variant="glass" className={styles.metricCard}>
                             <MessageSquare className={styles.iconComm} size={24} />
                             <div className={styles.formGroup} style={{ gap: '4px' }}>
                                 <span className={styles.metricLabel}>Communication</span>
                                 <span className={styles.metricValue}>Excellent</span>
                             </div>
                         </Card>
-                        <Card variant="default" className={styles.metricCard}>
+                        <Card variant="glass" className={styles.metricCard}>
                             <AlertCircle className={styles.iconConf} size={24} />
                             <div className={styles.formGroup} style={{ gap: '4px' }}>
                                 <span className={styles.metricLabel}>Confidence</span>
                                 <span className={styles.metricValueWarning}>Needs Work</span>
                             </div>
                         </Card>
-                        <Card variant="default" className={`${styles.metricCard} ${styles.metricCardReadiness}`}>
+                        <Card variant="glass" className={`${styles.metricCard} ${styles.metricCardReadiness}`}>
                             <span className={styles.metricLabelReadiness}>Readiness</span>
                             <span className={styles.metricValueReadiness}>78%</span>
                         </Card>
@@ -111,7 +111,7 @@ const MockInterviewStart = () => {
 
                 {/* SECTION 4: Preparation Tips */}
                 <section>
-                    <Card variant="default">
+                    <Card variant="glass">
                         <h2 className={styles.sectionTitle} style={{ borderBottom: 'none', paddingBottom: 0 }}>
                             <CheckCircle className={styles.iconTips} size={24} />
                             Preparation Tips
