@@ -1,0 +1,55 @@
+/* ============================================================
+   MainLayout — ACIE Shell
+   ============================================================ */
+
+.shell {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg-primary);
+}
+
+/* ---------- Main content area ---------- */
+.main {
+    /* Push right of sidebar */
+    margin-left: var(--sidebar-width);
+    /* Push below navbar */
+    padding-top: var(--navbar-height);
+    /* Fill remaining width */
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    transition: margin-left var(--transition-normal);
+}
+
+/* When sidebar is collapsed, shift main accordingly */
+.collapsed .main {
+    margin-left: 64px;
+}
+
+/* ---------- Inner content wrapper ---------- */
+.contentInner {
+    max-width: 1400px;
+    width: 100%;
+    padding: var(--space-6);
+    margin: 0 auto;
+}
+
+/* ---------- Responsive Breakpoints ---------- */
+
+/* Tablet: sidebar collapses to icon strip */
+@media (max-width: 900px) {
+    .main {
+        margin-left: 64px;
+    }
+}
+
+/* Mobile: sidebar hidden off-screen (toggled via JS if needed) */
+@media (max-width: 640px) {
+    .main {
+        margin-left: 0;
+    }
+
+    .contentInner {
+        padding: var(--space-4);
+    }
+}

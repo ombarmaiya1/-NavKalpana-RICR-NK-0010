@@ -1,0 +1,91 @@
+/* ============================================================
+   Card — ACIE Design System
+   ============================================================ */
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    /* 16px */
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    position: relative;
+    transition: var(--transition-normal);
+}
+
+/* ---------- Padding ---------- */
+.card--padded .cardBody {
+    padding: var(--space-5);
+    /* 20px */
+}
+
+.card--padded .cardHeader,
+.card--padded .cardFooter {
+    padding: var(--space-4) var(--space-5);
+}
+
+/* ---------- Variants ---------- */
+
+/* Default: same as base */
+
+/* Elevated */
+.card--elevated {
+    box-shadow: var(--shadow-lg);
+    background: rgba(30, 41, 59, 0.95);
+}
+
+/* Bordered */
+.card--bordered {
+    border-color: var(--border-color-hover);
+    box-shadow: none;
+}
+
+/* Glass */
+.card--glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Hoverable ---------- */
+.card--hoverable {
+    cursor: pointer;
+}
+
+.card--hoverable:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-color-hover);
+}
+
+.card--hoverable:active {
+    transform: translateY(-1px);
+}
+
+/* ---------- Header ---------- */
+.cardHeader {
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+}
+
+/* ---------- Body ---------- */
+.cardBody {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* ---------- Footer ---------- */
+.cardFooter {
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
