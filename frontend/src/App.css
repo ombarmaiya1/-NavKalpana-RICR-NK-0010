@@ -1,1 +1,10 @@
-/* Application specific styles */
+/* App-level layout overrides — keep component-specific styles here */
+/* Global theme & glassmorphism styles live in src/styles/theme.css   */
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}

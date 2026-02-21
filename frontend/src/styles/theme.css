@@ -1,45 +1,74 @@
-/* ============================================================
-   ACIE — Global Design System Theme
-   ============================================================ */
+/* =============================================
+   THEME VARIABLES — NavKalpana Design System
+   ============================================= */
 
 /* ---------- Google Fonts ---------- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* ---------- CSS Custom Properties — Dark Mode (default) ---------- */
-:root {
-  /* Backgrounds */
+/* =============================================
+   DARK MODE (default)
+   ============================================= */
+[data-theme='dark'] {
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
-  --card-bg: #1e293b;
-  --navbar-bg: rgba(15, 23, 42, 0.85);
-
-  /* Borders */
+  --card-bg: rgba(30, 41, 59, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
   --border-color: rgba(255, 255, 255, 0.08);
   --border-color-hover: rgba(255, 255, 255, 0.16);
-
-  /* Brand */
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --accent: #22d3ee;
-
-  /* Text */
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-
-  /* Status */
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --accent: #22d3ee;
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --success: #22c55e;
   --warning: #f59e0b;
-
-  /* Shadows */
+  --shadow: rgba(0, 0, 0, 0.4);
+  --glow: rgba(59, 130, 246, 0.35);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.25);
   --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-glow-primary: 0 0 20px rgba(59, 130, 246, 0.25);
   --shadow-glow-accent: 0 0 20px rgba(34, 211, 238, 0.2);
+  --navbar-bg: rgba(15, 23, 42, 0.85);
+}
 
+/* =============================================
+   LIGHT MODE
+   ============================================= */
+[data-theme='light'] {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #e2e8f0;
+  --card-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-color-hover: rgba(0, 0, 0, 0.16);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent: #0891b2;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --success: #16a34a;
+  --warning: #d97706;
+  --shadow: rgba(0, 0, 0, 0.12);
+  --glow: rgba(37, 99, 235, 0.25);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-glow-primary: 0 0 20px rgba(37, 99, 235, 0.2);
+  --shadow-glow-accent: 0 0 20px rgba(8, 145, 178, 0.18);
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+}
+
+/* =============================================
+   SHARED DESIGN TOKENS (theme-agnostic)
+   ============================================= */
+:root {
   /* Radius */
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -71,160 +100,116 @@
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
 
-/* ---------- Light Mode Overrides ---------- */
-[data-theme="light"] {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f1f5f9;
-  --card-bg: #ffffff;
-  --navbar-bg: rgba(255, 255, 255, 0.85);
-
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-color-hover: rgba(0, 0, 0, 0.16);
-
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
-
-
-/* ---------- Global Reset & Base ---------- */
+/* =============================================
+   GLOBAL TRANSITIONS
+   ============================================= */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  line-height: 1.6;
+/* =============================================
+   GLASSMORPHISM — Card Component
+   ============================================= */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px var(--shadow);
+  padding: 1.5rem;
   color: var(--text-primary);
-  background-color: var(--bg-primary);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
-#root {
-  min-height: 100vh;
+/* =============================================
+   BUTTONS — Primary Button Glow
+   ============================================= */
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 18px var(--glow), 0 4px 12px var(--shadow);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* =============================================
+   THEME TOGGLE BUTTON
+   ============================================= */
+.theme-toggle {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-/* ---------- Typography ---------- */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-sans);
+.theme-toggle:hover {
+  box-shadow: 0 0 14px var(--glow);
+  transform: scale(1.08);
+}
+
+/* =============================================
+   NAVBAR
+   ============================================= */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 2rem;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.navbar__brand {
+  font-size: 1.25rem;
   font-weight: 700;
-  line-height: 1.25;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
-}
-
-h1 {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-}
-
-h2 {
-  font-size: clamp(1.375rem, 3vw, 2rem);
-}
-
-h3 {
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-}
-
-h4 {
-  font-size: 1.125rem;
-}
-
-h5 {
-  font-size: 1rem;
-}
-
-h6 {
-  font-size: 0.875rem;
-}
-
-p {
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-a {
   color: var(--primary);
+  letter-spacing: -0.02em;
   text-decoration: none;
-  transition: var(--transition-fast);
 }
 
-a:hover {
-  color: var(--accent);
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-code,
-pre {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
-}
-
-pre {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-  overflow-x: auto;
-}
-
-/* ---------- Scrollbar ---------- */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.22);
-}
-
-/* ---------- Selection ---------- */
-::selection {
-  background: rgba(59, 130, 246, 0.3);
-  color: var(--text-primary);
-}
-
-/* ---------- Focus Ring ---------- */
-:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* ---------- Utility Classes ---------- */
+/* =============================================
+   UTILITY CLASSES
+   ============================================= */
 .text-primary {
   color: var(--text-primary) !important;
 }
