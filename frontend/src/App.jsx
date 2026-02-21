@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import StudentDashboard from './pages/learning/Dashboard';
 import ResumeAnalysis from './pages/learning/ResumeAnalysis';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
 import './index.css';
 
 /**
@@ -16,6 +18,8 @@ function App() {
         <Routes>
           <Route path="/" element={<StudentDashboard />} />
           <Route path="/resume-analysis" element={<ResumeAnalysis />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
