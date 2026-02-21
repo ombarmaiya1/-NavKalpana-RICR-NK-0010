@@ -4,7 +4,7 @@ import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { BookOpen, AlertTriangle, TrendingUp, Play, FileText, Activity } from 'lucide-react';
+import { BookOpen, AlertTriangle, TrendingUp, Play, FileText, Activity, Layers, FileSearch } from 'lucide-react';
 import styles from './Dashboard.module.css';
 
 const performanceData = [
@@ -40,14 +40,30 @@ export default function Dashboard() {
         return 'var(--success)';
     };
 
+    const navItems = [
+        { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
+        { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
+    ];
+
     return (
-        <MainLayout pageTitle="Learning Dashboard">
+        <MainLayout pageTitle="Learning Dashboard" navItems={navItems}>
             <div className={styles.dashboard}>
 
                 {/* Welcome Section */}
                 <div className={styles.header}>
-                    <h1 className={styles.welcomeTitle}>Welcome back, Student</h1>
-                    <p className="text-muted">Here is an overview of your learning progress and upcoming tasks.</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
+                        <div>
+                            <h1 className={styles.welcomeTitle}>Welcome back, Student</h1>
+                            <p className="text-muted">Here is an overview of your learning progress and upcoming tasks.</p>
+                        </div>
+                        <Button
+                            variant="primary"
+                            leftIcon={<FileSearch size={20} />}
+                            onClick={() => navigate('/resume-analysis')}
+                        >
+                            Analyze Resume
+                        </Button>
+                    </div>
                 </div>
 
                 <div className={styles.topGrid}>

@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import { UploadCloud, FileText, CheckCircle, AlertCircle, Trash2, ShieldCheck, Target, Zap, Activity } from 'lucide-react';
+import { UploadCloud, FileText, CheckCircle, AlertCircle, Trash2, ShieldCheck, Target, Zap, Activity, Layers, FileSearch } from 'lucide-react';
 import styles from './ResumeAnalysis.module.css';
+
+const navItems = [
+    { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
+    { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
+];
 
 export default function ResumeAnalysis() {
     const [file, setFile] = useState(null);
@@ -51,7 +56,7 @@ export default function ResumeAnalysis() {
     };
 
     return (
-        <MainLayout pageTitle="Resume Analysis">
+        <MainLayout pageTitle="Resume Analysis" navItems={navItems}>
             <div className={styles.container}>
 
                 {/* SECTION 1: Page Header */}
