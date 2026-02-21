@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
-import Navbar from './components/Navbar';
+import Navbar from './layouts/Navbar';
+import Dashboard from './pages/learning/Dashboard';
 import MockInterviewStart from './pages/interview/MockInterviewStart';
 import './index.css';
 
@@ -17,7 +18,8 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<MockInterviewStart />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/mock-interview" element={<MockInterviewStart />} />
         </Routes>
       </Router>
     </ThemeProvider>
