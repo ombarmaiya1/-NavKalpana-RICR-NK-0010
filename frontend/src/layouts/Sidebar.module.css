@@ -1,0 +1,192 @@
+/* ============================================================
+   Sidebar — ACIE Layout
+   ============================================================ */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    /* 240px */
+    height: 100vh;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    transition: width var(--transition-normal);
+    overflow: hidden;
+}
+
+/* ---------- Collapsed (icon-only) ---------- */
+.collapsed {
+    width: 64px;
+}
+
+/* ---------- Brand ---------- */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0 var(--space-5);
+    height: var(--navbar-height);
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.brandIcon {
+    font-size: 1.4rem;
+    color: var(--primary);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.brandName {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ---------- Navigation ---------- */
+.nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--space-4) 0;
+}
+
+/* hide scrollbar in nav */
+.nav::-webkit-scrollbar {
+    width: 0;
+}
+
+.navList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 var(--space-3);
+}
+
+.navItem {
+    width: 100%;
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 10px var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.navLink:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+/* Active state */
+.navLink.active {
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--primary);
+}
+
+.activeBar {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 3px;
+    background: var(--primary);
+    border-radius: var(--radius-full) 0 0 var(--radius-full);
+}
+
+.navLink.active .activeBar {
+    display: block;
+}
+
+.navIcon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navLabel {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---------- Footer ---------- */
+.sidebarFooter {
+    padding: var(--space-4) var(--space-3);
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.userChip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-2);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.userChip:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.userName {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.userRole {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
