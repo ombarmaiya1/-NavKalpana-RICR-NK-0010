@@ -43,8 +43,6 @@ export default function Dashboard() {
     const navItems = [
         { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
         { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
-        { label: 'Learning Modules', to: '/learning', icon: <BookOpen size={20} /> },
-        { label: 'Assignments', to: '/assignments', icon: <FileText size={20} /> },
     ];
 
     return (
@@ -58,22 +56,13 @@ export default function Dashboard() {
                             <h1 className={styles.welcomeTitle}>Welcome back, Student</h1>
                             <p className="text-muted">Here is an overview of your learning progress and upcoming tasks.</p>
                         </div>
-                        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-                            <Button
-                                variant="secondary"
-                                leftIcon={<BookOpen size={20} />}
-                                onClick={() => navigate('/learning')}
-                            >
-                                Continue Learning
-                            </Button>
-                            <Button
-                                variant="primary"
-                                leftIcon={<FileSearch size={20} />}
-                                onClick={() => navigate('/resume-analysis')}
-                            >
-                                Analyze Resume
-                            </Button>
-                        </div>
+                        <Button
+                            variant="primary"
+                            leftIcon={<FileSearch size={20} />}
+                            onClick={() => navigate('/resume-analysis')}
+                        >
+                            Analyze Resume
+                        </Button>
                     </div>
                 </div>
 
