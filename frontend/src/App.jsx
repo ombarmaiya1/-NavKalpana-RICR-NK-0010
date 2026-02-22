@@ -14,27 +14,15 @@ import Signup from './pages/auth/Signup';
 import QuizSetup from './pages/quiz/QuizSetup';
 import QuizSession from './pages/quiz/QuizSession';
 import QuizResult from './pages/quiz/QuizResult';
-import './index.css';
-
-/**
- * App — root router.
- * ThemeProvider wraps everything so every component (MainLayout,
- * Navbar, ThemeToggle) can access useTheme().
- *
- * Add more <Route> entries here as new pages are built.
- * The base path "/" redirects immediately to the Dashboard.
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeContext';
-import StudentDashboard from './pages/learning/Dashboard';
-import ResumeAnalysis from './pages/learning/ResumeAnalysis';
-import Login from './pages/auth/Login';
-import Signup from './pages/auth/Signup';
+import Settings from './pages/settings/Settings';
 import './index.css';
 
 /**
  * App — root component.
- * Wrap all page content with <ThemeProvider> so every child
- * can access useTheme().
+ * ThemeProvider wraps everything so every component (MainLayout,
+ * Navbar, ThemeToggle) can access useTheme().
+ *
+ * Add more <Route> entries here as new pages are built.
  */
 export default function App() {
   return (
@@ -53,6 +41,7 @@ export default function App() {
           <Route path="/interview" element={<InterviewPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/settings" element={<Settings />} />
 
           {/* Quiz Flow */}
           <Route path="/quiz-setup" element={<QuizSetup />} />
@@ -61,10 +50,6 @@ export default function App() {
 
           {/* 404 fallback → also goes to dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/" element={<StudentDashboard />} />
-          <Route path="/resume-analysis" element={<ResumeAnalysis />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

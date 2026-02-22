@@ -53,14 +53,8 @@ export default function TopicDetail() {
         }
     }, [topicId, navigate]);
 
-    const navItems = [
-        { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
-        { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
-        { label: 'Learning Modules', to: '/learning', icon: <BookOpen size={20} /> },
-    ];
-
     return (
-        <MainLayout pageTitle={topic ? topic.title : 'Topic Details'} navItems={navItems}>
+        <MainLayout pageTitle={topic ? topic.title : 'Topic Details'}>
             <div className={styles.container}>
 
                 {loading ? (

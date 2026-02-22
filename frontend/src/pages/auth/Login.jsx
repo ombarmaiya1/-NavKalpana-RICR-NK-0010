@@ -9,6 +9,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const isEmpty = !email.trim() || !password.trim();
 
@@ -19,11 +20,38 @@ export default function Login() {
         e.preventDefault();
         if (isEmpty) return;
         setLoading(true);
-        // Simulate network request — replace with real auth call
-        await new Promise(r => setTimeout(r, 1500));
-        localStorage.setItem('token', 'mock-jwt-token-12345');
-        setLoading(false);
-        navigate('/dashboard');
+        setError('');
+
+        try {
+            // POST to backend API (proxied to localhost:8000)
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                }),
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.detail || 'Login failed. Invalid credentials.');
+            }
+
+            const data = await response.json();
+
+            // Store the JWT
+            localStorage.setItem('token', data.access_token);
+            navigate('/dashboard');
+
+        } catch (err) {
+            console.error('Login error:', err);
+            setError(err.message || 'An error occurred during login. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -39,6 +67,12 @@ export default function Login() {
                         <h1 className={styles.title}>Welcome Back</h1>
                         <p className={styles.subtitle}>Login to continue your interview journey</p>
                     </div>
+
+                    {error && (
+                        <div className={styles.errorAlert} style={{ color: 'var(--danger)', marginBottom: 'var(--space-4)', fontSize: '0.875rem' }}>
+                            {error}
+                        </div>
+                    )}
 
                     {/* Form */}
                     <form className={styles.form} onSubmit={handleSubmit} noValidate>

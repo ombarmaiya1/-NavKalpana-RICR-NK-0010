@@ -105,4 +105,12 @@ const mockApiPlugin = () => ({
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), mockApiPlugin()],
+  server: {
+    proxy: {
+      '/api/auth': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      }
+    }
+  }
 })

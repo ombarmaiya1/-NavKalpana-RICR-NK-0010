@@ -50,13 +50,6 @@ export default function AssignmentPage() {
         fetchAssignments();
     }, [navigate]);
 
-    const navItems = [
-        { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
-        { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
-        { label: 'Learning Modules', to: '/learning', icon: <BookOpen size={20} /> },
-        { label: 'Assignments', to: '/assignments', icon: <FileText size={20} /> },
-    ];
-
     const getStatusStyles = (status) => {
         switch (status) {
             case 'graded':
@@ -82,7 +75,7 @@ export default function AssignmentPage() {
     };
 
     return (
-        <MainLayout pageTitle="Assignments" navItems={navItems}>
+        <MainLayout pageTitle="Assignments">
             <div className={styles.container}>
 
                 {/* Header Section */}

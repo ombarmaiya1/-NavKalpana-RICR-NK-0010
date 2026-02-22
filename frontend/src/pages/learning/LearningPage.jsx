@@ -50,14 +50,8 @@ export default function LearningPage() {
         fetchTopics();
     }, [navigate]);
 
-    const navItems = [
-        { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
-        { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
-        { label: 'Learning Modules', to: '/learning', icon: <BookOpen size={20} /> },
-    ];
-
     return (
-        <MainLayout pageTitle="Learning" navItems={navItems}>
+        <MainLayout pageTitle="Learning">
             <div className={styles.container}>
 
                 {/* Header Section */}

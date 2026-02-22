@@ -37,16 +37,10 @@ export default function Dashboard() {
         if (percent < 30) return 'var(--danger)';
         if (percent < 60) return 'var(--warning)';
         if (percent < 80) return 'var(--primary)';
-        return 'var(--success)';
     };
 
-    const navItems = [
-        { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
-        { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
-    ];
-
     return (
-        <MainLayout pageTitle="Learning Dashboard" navItems={navItems}>
+        <MainLayout pageTitle="Learning Dashboard">
             <div className={styles.dashboard}>
 
                 {/* Welcome Section */}

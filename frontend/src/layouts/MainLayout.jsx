@@ -1,12 +1,14 @@
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
-import { LayoutDashboard, Mic, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Mic, BookOpen, FileText, Activity } from 'lucide-react';
 import styles from './MainLayout.module.css';
 
 const DEFAULT_NAV = [
     { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
+    { label: 'Learning', to: '/learning', icon: <BookOpen size={18} /> },
+    { label: 'Assignments', to: '/assignments', icon: <FileText size={18} /> },
     { label: 'Mock Interview', to: '/mock-interview', icon: <Mic size={18} /> },
-    { label: 'Adaptive Quiz', to: '/quiz-setup', icon: <BookOpen size={18} /> },
+    { label: 'Adaptive Quiz', to: '/quiz-setup', icon: <Activity size={18} /> },
 ];
 
 /**

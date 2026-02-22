@@ -11,6 +11,8 @@ export default function Signup() {
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const isEmpty = !name.trim() || !email.trim() || !password.trim() || !confirm.trim();
     const mismatch = confirm.length > 0 && password !== confirm;
@@ -23,11 +25,40 @@ export default function Signup() {
         e.preventDefault();
         if (isDisabled) return;
         setLoading(true);
-        // Simulate network request — replace with real auth call
-        await new Promise(r => setTimeout(r, 1500));
-        localStorage.setItem('token', 'mock-jwt-token-12345');
-        setLoading(false);
-        navigate('/dashboard');
+        setError('');
+        setSuccessMessage('');
+
+        try {
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    name: name
+                }),
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.detail || 'Signup failed. Please try again.');
+            }
+
+            // Optional: You could log them in immediately, or redirect to login.
+            setSuccessMessage("Account created successfully! Redirecting to login...");
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
+
+        } catch (err) {
+            console.error('Signup error:', err);
+            setError(err.message || 'An error occurred during signup.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -43,6 +74,18 @@ export default function Signup() {
                         <h1 className={styles.title}>Create Account</h1>
                         <p className={styles.subtitle}>Start your AI interview preparation today</p>
                     </div>
+
+                    {error && (
+                        <div className={styles.errorAlert} style={{ color: 'var(--danger)', marginBottom: 'var(--space-4)', fontSize: '0.875rem' }}>
+                            {error}
+                        </div>
+                    )}
+
+                    {successMessage && (
+                        <div className={styles.successAlert} style={{ color: 'var(--success)', marginBottom: 'var(--space-4)', fontSize: '0.875rem' }}>
+                            {successMessage}
+                        </div>
+                    )}
 
                     {/* Form */}
                     <form className={styles.form} onSubmit={handleSubmit} noValidate>
