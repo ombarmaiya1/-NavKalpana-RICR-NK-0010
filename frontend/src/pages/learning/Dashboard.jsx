@@ -44,6 +44,7 @@ export default function Dashboard() {
         { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
         { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
         { label: 'Learning Modules', to: '/learning', icon: <BookOpen size={20} /> },
+        { label: 'Assignments', to: '/assignments', icon: <FileText size={20} /> },
     ];
 
     return (
@@ -108,6 +109,24 @@ export default function Dashboard() {
                         >
                             Analyze Resume
                         </Button>
+                    </Card>
+
+                    {/* SECTION 1.5: Assignments (New) */}
+                    <Card hoverable>
+                        <div className={styles.flexBetween}>
+                            <h3 className="text-secondary">Assignments</h3>
+                            <FileText className="text-primary" size={24} />
+                        </div>
+                        <p className={styles.textMuted} style={{ marginTop: 'var(--space-2)' }}>Check and complete your active assignments.</p>
+                        <div style={{ marginTop: 'auto', paddingTop: 'var(--space-4)' }}>
+                            <Button
+                                variant="primary"
+                                fullWidth
+                                onClick={() => navigate('/assignments')}
+                            >
+                                View Assignments
+                            </Button>
+                        </div>
                     </Card>
 
                     {/* SECTION 3: Upcoming Adaptive Quiz */}
