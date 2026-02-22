@@ -1,0 +1,148 @@
+.container {
+    max-width: 64rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.centerState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) 0;
+    gap: var(--space-4);
+    min-height: 400px;
+}
+
+.spinner {
+    color: var(--primary);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.stateText {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+}
+
+.errorIcon {
+    color: var(--danger);
+}
+
+.errorText {
+    color: var(--danger);
+    font-weight: 500;
+}
+
+.moduleSectionHeader {
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.moduleSectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.moduleList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.moduleRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.moduleRow:hover {
+    border-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.moduleInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.moduleIconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.completedIcon {
+    color: var(--success);
+}
+
+.pendingIcon {
+    color: var(--text-muted);
+}
+
+.moduleDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.moduleNumber {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.moduleTitle {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.emptyState {
+    color: var(--text-muted);
+    font-style: italic;
+    padding: var(--space-4) 0;
+}
