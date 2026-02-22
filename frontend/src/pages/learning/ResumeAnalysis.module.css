@@ -1,0 +1,222 @@
+.container {
+    max-width: 1152px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-6);
+}
+
+.header {
+    text-align: center;
+    padding: var(--space-6);
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* Upload Area */
+.uploadArea {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-6);
+    text-align: center;
+    transition: border-color var(--transition-normal), background var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    background: transparent;
+    cursor: pointer;
+}
+
+.uploadArea:hover {
+    border-color: var(--primary);
+    background: var(--bg-secondary);
+}
+
+.uploadIcon {
+    color: var(--primary);
+    background: var(--glow);
+    padding: var(--space-3);
+    border-radius: 50%;
+    margin-bottom: var(--space-2);
+}
+
+.uploadText {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.uploadSubtext {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.fileInput {
+    display: none;
+}
+
+.selectedFile {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    margin-top: var(--space-4);
+    justify-content: space-between;
+}
+
+.fileName {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.fileLabel {
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Tags */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+}
+
+.tag {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+}
+
+/* Lists */
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.listItem {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.listIconSuccess {
+    color: var(--success);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.listIconWarning {
+    color: var(--warning);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+/* Summary Details */
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.summaryRow:last-child {
+    border-bottom: none;
+}
+
+.summaryLabel {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.summaryValue {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Score Card */
+.scoreCard {
+    text-align: center;
+    padding: var(--space-4) 0;
+}
+
+.scoreCircle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4);
+    box-shadow: var(--shadow-glow-primary);
+}
+
+.scoreValue {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.scoreLabel {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.scoreMessage {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 500;
+}

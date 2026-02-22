@@ -1,10 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { BookOpen, AlertTriangle, TrendingUp, Play, FileText, Activity } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { BookOpen, AlertTriangle, TrendingUp, Play, FileText, Activity, Layers, FileSearch } from 'lucide-react';
 import styles from './Dashboard.module.css';
 
 const performanceData = [
@@ -30,6 +30,7 @@ const masteryTopics = [
 
 export default function Dashboard() {
     const navigate = useNavigate();
+
     const getHeatmapColor = (percent) => {
         // Return an rgba value based on percentage
         // Low percent = more red/orange, High percent = more green/blue
@@ -39,14 +40,30 @@ export default function Dashboard() {
         return 'var(--success)';
     };
 
+    const navItems = [
+        { label: 'Dashboard', to: '/', icon: <Layers size={20} /> },
+        { label: 'Resume Analysis', to: '/resume-analysis', icon: <FileSearch size={20} /> },
+    ];
+
     return (
-        <MainLayout pageTitle="Learning Dashboard">
+        <MainLayout pageTitle="Learning Dashboard" navItems={navItems}>
             <div className={styles.dashboard}>
 
                 {/* Welcome Section */}
                 <div className={styles.header}>
-                    <h1 className={styles.welcomeTitle}>Welcome back, Student</h1>
-                    <p className="text-muted">Here is an overview of your learning progress and upcoming tasks.</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
+                        <div>
+                            <h1 className={styles.welcomeTitle}>Welcome back, Student</h1>
+                            <p className="text-muted">Here is an overview of your learning progress and upcoming tasks.</p>
+                        </div>
+                        <Button
+                            variant="primary"
+                            leftIcon={<FileSearch size={20} />}
+                            onClick={() => navigate('/resume-analysis')}
+                        >
+                            Analyze Resume
+                        </Button>
+                    </div>
                 </div>
 
                 <div className={styles.topGrid}>
@@ -73,8 +90,13 @@ export default function Dashboard() {
                         </div>
                         <div className={styles.scoreVal} style={{ color: 'var(--accent)' }}>72<span style={{ fontSize: '1.5rem', color: 'var(--text-muted)' }}>/100</span></div>
                         <p className={styles.textMuted}>Add 2 more backend projects to boost your score.</p>
-                        <Button variant="secondary" leftIcon={<FileText size={18} />} fullWidth>
-                            Improve Resume
+                        <Button
+                            variant="secondary"
+                            leftIcon={<FileText size={18} />}
+                            fullWidth
+                            onClick={() => navigate('/resume-analysis')}
+                        >
+                            Analyze Resume
                         </Button>
                     </Card>
 

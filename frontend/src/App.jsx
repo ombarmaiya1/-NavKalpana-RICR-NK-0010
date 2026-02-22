@@ -18,6 +18,18 @@ import './index.css';
  *
  * Add more <Route> entries here as new pages are built.
  * The base path "/" redirects immediately to the Dashboard.
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
+import StudentDashboard from './pages/learning/Dashboard';
+import ResumeAnalysis from './pages/learning/ResumeAnalysis';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
+import './index.css';
+
+/**
+ * App — root component.
+ * Wrap all page content with <ThemeProvider> so every child
+ * can access useTheme().
  */
 export default function App() {
   return (
@@ -39,6 +51,10 @@ export default function App() {
 
           {/* 404 fallback → also goes to dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<StudentDashboard />} />
+          <Route path="/resume-analysis" element={<ResumeAnalysis />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
