@@ -110,7 +110,15 @@ export default defineConfig({
       '/api/auth': {
         target: 'http://localhost:8000',
         changeOrigin: true,
-      }
+      },
+      '/api/resume': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/api/quiz': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
     }
   }
 })

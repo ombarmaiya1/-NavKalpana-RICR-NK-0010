@@ -1,61 +1,64 @@
 /**
  * quizService.js
- * Handles all backend API calls for the Quiz feature.
+ * Handles all backend API calls for the Adaptive Quiz feature.
  */
 
 const BASE_URL = '/api/quiz';
 
+/**
+ * Helper to get authentication headers.
+ */
+const getHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+};
+
 const quizService = {
     /**
-     * Starts a new quiz session.
-     * @param {Object} data - { topic, difficulty, totalQuestions }
-     * @returns {Promise} - { quizId, questions }
+     * Fetches quiz options based on resume topics and mastery.
+     * @returns {Promise} - { resume_topics, recommended_topics, mixed_quiz_name, mode }
+     */
+    getOptions: async () => {
+        const response = await fetch(`${BASE_URL}/options`, {
+            headers: getHeaders()
+        });
+        if (!response.ok) throw new Error('Failed to fetch quiz options');
+        return response.json();
+    },
+
+    /**
+     * Generates a new adaptive quiz session for a topic.
+     * @param {Object} data - { topic }
+     * @returns {Promise} - Quiz object with questions
      */
     startQuiz: async (data) => {
-        const response = await fetch(`${BASE_URL}/start`, {
+        const response = await fetch(`${BASE_URL}/generate`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error('Failed to start quiz');
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.detail || 'Failed to start quiz');
+        }
         return response.json();
     },
 
     /**
-     * Fetches details of a specific quiz.
-     * @param {string} quizId 
-     * @returns {Promise} - Quiz data
+     * Submits quiz results and updates mastery.
+     * @param {Object} data - { topic, correct_answers, total_questions }
+     * @returns {Promise} - { score, topic_accuracy, new_mastery }
      */
-    getQuiz: async (quizId) => {
-        const response = await fetch(`${BASE_URL}/${quizId}`);
-        if (!response.ok) throw new Error('Failed to fetch quiz details');
-        return response.json();
-    },
-
-    /**
-     * Submits quiz answers.
-     * @param {string} quizId 
-     * @param {Array} answers 
-     * @returns {Promise} - { score, percentage, feedback }
-     */
-    submitQuiz: async (quizId, answers) => {
+    submitQuiz: async (data) => {
         const response = await fetch(`${BASE_URL}/submit`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ quizId, answers }),
+            headers: getHeaders(),
+            body: JSON.stringify(data),
         });
         if (!response.ok) throw new Error('Failed to submit quiz');
-        return response.json();
-    },
-
-    /**
-     * Fetches results of a completed quiz.
-     * @param {string} quizId 
-     * @returns {Promise} - Result data
-     */
-    getResults: async (quizId) => {
-        const response = await fetch(`${BASE_URL}/result/${quizId}`);
-        if (!response.ok) throw new Error('Failed to fetch quiz results');
         return response.json();
     }
 };

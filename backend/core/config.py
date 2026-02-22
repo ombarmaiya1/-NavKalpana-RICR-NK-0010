@@ -13,8 +13,10 @@ class Settings(BaseSettings):
     # ── Database ────────────────────────────────────────────────────────────
     DATABASE_URL: str = "sqlite:///./app.db"
 
-    # ── OpenAI ──────────────────────────────────────────────────────────────
-    OPENAI_API_KEY: str = ""   # Optional: leave empty to use rule-based analysis
+    # ── AI Providers ────────────────────────────────────────────────────────
+    AI_PROVIDER: str = "openai"
+    OPENAI_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
 
     class Config:
         env_file = ".env"
@@ -24,10 +26,11 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # ── Startup validation ───────────────────────────────────────────────────────
-# Warn (not crash) if the key is missing or placeholder so the app is still
-# usable with the rule-based fallback for resume analysis.
-if not settings.OPENAI_API_KEY or settings.OPENAI_API_KEY == "PASTE_YOUR_KEY_HERE":
-    print(
-        "[config] WARNING: OPENAI_API_KEY is not set in backend/.env. "
-        "Resume analysis will use rule-based scoring only."
-    )
+if settings.AI_PROVIDER == "openai" and (not settings.OPENAI_API_KEY or settings.OPENAI_API_KEY == "PASTE_YOUR_KEY_HERE"):
+    print("[config] WARNING: AI_PROVIDER is 'openai' but OPENAI_API_KEY is missing/placeholder.")
+
+if settings.AI_PROVIDER == "gemini" and (not settings.GEMINI_API_KEY or settings.GEMINI_API_KEY == "PASTE_YOUR_GEMINI_KEY_HERE"):
+    print("[config] WARNING: AI_PROVIDER is 'gemini' but GEMINI_API_KEY is missing/placeholder.")
+
+if settings.AI_PROVIDER not in ["openai", "gemini"]:
+    print(f"[config] ERROR: Invalid AI_PROVIDER '{settings.AI_PROVIDER}'. Must be 'openai' or 'gemini'.")

@@ -1,53 +1,65 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import { UploadCloud, FileText, CheckCircle, AlertCircle, Trash2, ShieldCheck, Target, Zap, Activity, Layers, FileSearch } from 'lucide-react';
+import { UploadCloud, FileText, CheckCircle, AlertCircle, Trash2, ShieldCheck, Target, Zap, Activity, Layers, FileSearch, ArrowRight, BookOpen } from 'lucide-react';
 import styles from './ResumeAnalysis.module.css';
 
 export default function ResumeAnalysis() {
+    const navigate = useNavigate();
     const [file, setFile] = useState(null);
+    const [role, setRole] = useState('Full Stack Developer');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [analysisResult, setAnalysisResult] = useState(null);
+    const [error, setError] = useState('');
 
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files[0]) {
             setFile(e.target.files[0]);
-            setAnalysisResult(null); // Reset previous results on new upload
+            setAnalysisResult(null);
+            setError('');
         }
     };
 
     const handleRemoveFile = () => {
         setFile(null);
         setAnalysisResult(null);
+        setError('');
     };
 
-    const handleAnalyze = () => {
-        if (!file) return;
+    const handleAnalyze = async () => {
+        if (!file || !role) return;
         setIsAnalyzing(true);
+        setError('');
 
-        // Mock analysis delay
-        setTimeout(() => {
-            setIsAnalyzing(false);
-            setAnalysisResult({
-                candidateName: "John Doe",
-                role: "Software Engineer",
-                experience: "Mid-Level",
-                score: 82,
-                scoreMessage: "Strong foundation, needs more backend projects.",
-                skills: ["React", "Node.js", "Python", "SQL", "Docker", "AWS"],
-                strengths: [
-                    "Clear and concise summary section",
-                    "Strong metrics used in experience bullet points",
-                    "Relevant modern tech stack highlighted"
-                ],
-                improvements: [
-                    "Add consistent action verbs to begin every bullet point",
-                    "Include a link to your GitHub profile or portfolio",
-                    "Reduce overall length to a single page"
-                ]
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('role', role);
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/resume/analyze', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                    // Do NOT set Content-Type, browser will set it with boundary
+                },
+                body: formData
             });
-        }, 1500);
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.detail || 'Analysis failed');
+            }
+
+            const data = await response.json();
+            setAnalysisResult(data);
+        } catch (err) {
+            setError(err.message || 'An error occurred during analysis.');
+        } finally {
+            setIsAnalyzing(false);
+        }
     };
 
     return (
@@ -56,8 +68,8 @@ export default function ResumeAnalysis() {
 
                 {/* SECTION 1: Page Header */}
                 <Card className={styles.header}>
-                    <h1 className={styles.title}>Resume Analysis</h1>
-                    <p className={styles.subtitle}>Upload your resume and get AI-powered feedback instantly</p>
+                    <h1 className={styles.title}>Resume Intelligence</h1>
+                    <p className={styles.subtitle}>Upload your resume to extract topics and generate adaptive technical quizzes.</p>
                 </Card>
 
                 <div className={styles.grid}>
@@ -65,19 +77,30 @@ export default function ResumeAnalysis() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
                         {/* SECTION 2: Upload Resume */}
                         <Card>
-                            <h2 className={styles.sectionTitle}><UploadCloud size={20} className="text-brand" /> Upload Resume</h2>
+                            <h2 className={styles.sectionTitle}><UploadCloud size={20} className="text-brand" /> Analysis Setup</h2>
+
+                            <div className={styles.field} style={{ marginBottom: '1.5rem' }}>
+                                <label className={styles.label}>Target Role</label>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                    placeholder="e.g. Backend Developer"
+                                />
+                            </div>
 
                             <div className={styles.uploadArea}>
                                 <label className={styles.fileLabel}>
                                     <div className={styles.uploadIcon}>
                                         <FileText size={32} />
                                     </div>
-                                    <span className={styles.uploadText}>Click or drag to upload</span>
-                                    <span className={styles.uploadSubtext}>Supported formats: PDF, DOCX (Max 5MB)</span>
+                                    <span className={styles.uploadText}>{file ? file.name : 'Click or drag to upload resume'}</span>
+                                    <span className={styles.uploadSubtext}>Supported formats: PDF (Max 5MB)</span>
                                     <input
                                         type="file"
                                         className={styles.fileInput}
-                                        accept=".pdf,.doc,.docx"
+                                        accept=".pdf"
                                         onChange={handleFileChange}
                                     />
                                 </label>
@@ -99,46 +122,43 @@ export default function ResumeAnalysis() {
                                 </div>
                             )}
 
+                            {error && <p className={styles.errorText} style={{ color: 'var(--danger)', marginTop: '1rem' }}>{error}</p>}
+
                             <div style={{ marginTop: 'var(--space-6)' }}>
                                 <Button
                                     variant="primary"
                                     fullWidth
-                                    disabled={!file || isAnalyzing}
+                                    disabled={!file || !role || isAnalyzing}
                                     onClick={handleAnalyze}
                                     leftIcon={isAnalyzing ? <Activity className="spin" size={18} /> : <Zap size={18} />}
                                 >
-                                    {isAnalyzing ? "Analyzing Resume..." : "Analyze Resume"}
+                                    {isAnalyzing ? "AI is Analyzing..." : "Extract Topics & Analyze"}
                                 </Button>
                             </div>
                         </Card>
 
-                        {/* SECTION 4 & 5 container - visible after analysis */}
+                        {/* Analysis Insights - visible after analysis */}
                         {analysisResult && (
                             <>
-                                {/* SECTION 4: Strengths */}
                                 <Card>
-                                    <h2 className={styles.sectionTitle}><ShieldCheck size={20} className="text-success" /> Key Strengths</h2>
+                                    <h2 className={styles.sectionTitle}><Target size={20} className="text-warning" /> Improvement Tips</h2>
                                     <ul className={styles.list}>
-                                        {analysisResult.strengths.map((str, idx) => (
-                                            <li key={idx} className={styles.listItem}>
-                                                <CheckCircle size={18} className={styles.listIconSuccess} />
-                                                <span>{str}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </Card>
-
-                                {/* SECTION 5: Improvements */}
-                                <Card>
-                                    <h2 className={styles.sectionTitle}><Target size={20} className="text-warning" /> Areas for Improvement</h2>
-                                    <ul className={styles.list}>
-                                        {analysisResult.improvements.map((imp, idx) => (
+                                        {analysisResult.recommendations.map((imp, idx) => (
                                             <li key={idx} className={styles.listItem}>
                                                 <AlertCircle size={18} className={styles.listIconWarning} />
                                                 <span>{imp}</span>
                                             </li>
                                         ))}
                                     </ul>
+                                </Card>
+
+                                <Card>
+                                    <h2 className={styles.sectionTitle}><Layers size={20} className="text-accent" /> Missing Critical Skills</h2>
+                                    <div className={styles.tags}>
+                                        {analysisResult.missing_skills.map((skill, idx) => (
+                                            <span key={idx} className={styles.tag} style={{ background: 'rgba(var(--danger-rgb), 0.1)', color: 'var(--danger)' }}>{skill}</span>
+                                        ))}
+                                    </div>
                                 </Card>
                             </>
                         )}
@@ -147,54 +167,54 @@ export default function ResumeAnalysis() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
                         {analysisResult ? (
                             <>
-                                {/* SECTION 6: Resume Score */}
+                                {/* SECTION 6: Resume Strength */}
                                 <Card>
                                     <div className={styles.scoreCard}>
                                         <div className={styles.scoreCircle}>
-                                            <span className={styles.scoreValue}>{analysisResult.score}</span>
+                                            <span className={styles.scoreValue}>{analysisResult.resume_strength}</span>
                                         </div>
-                                        <div className={styles.scoreLabel}>Overall Score / 100</div>
+                                        <div className={styles.scoreLabel}>ATS Strength Score</div>
                                         <p className={styles.scoreMessage} style={{ marginTop: 'var(--space-4)' }}>
-                                            "{analysisResult.scoreMessage}"
+                                            Your resume has a strength score of {analysisResult.resume_strength}%. Focus on the missing skills to improve your match.
                                         </p>
                                     </div>
                                 </Card>
 
-                                {/* SECTION 3: Resume Summary */}
+                                {/* SECTION 3: Extracted Topics for Quiz */}
                                 <Card>
-                                    <h2 className={styles.sectionTitle}><FileText size={20} className="text-accent" /> Extraction Summary</h2>
+                                    <div className={styles.quizUnlockCard}>
+                                        <h2 className={styles.sectionTitle}><BookOpen size={20} className="text-primary" /> Quiz Topics Unlocked</h2>
+                                        <p className={styles.quizDescription}>We've extracted the following topics from your experience. You can now take adaptive quizzes on these.</p>
 
-                                    <div className={styles.summaryRow}>
-                                        <span className={styles.summaryLabel}>Detected Role</span>
-                                        <span className={styles.summaryValue}>{analysisResult.role}</span>
-                                    </div>
-                                    <div className={styles.summaryRow}>
-                                        <span className={styles.summaryLabel}>Experience</span>
-                                        <span className={styles.summaryValue}>{analysisResult.experience}</span>
-                                    </div>
-
-                                    <div style={{ marginTop: 'var(--space-4)' }}>
-                                        <span className={styles.summaryLabel}>Extracted Skills</span>
-                                        <div className={styles.tags}>
-                                            {analysisResult.skills.map((skill, idx) => (
-                                                <span key={idx} className={styles.tag}>{skill}</span>
+                                        <div className={styles.tags} style={{ margin: '1.5rem 0' }}>
+                                            {analysisResult.extracted_topics.map((topic, idx) => (
+                                                <span key={idx} className={styles.tag}>{topic}</span>
                                             ))}
                                         </div>
+
+                                        <Button
+                                            variant="primary"
+                                            fullWidth
+                                            onClick={() => navigate('/quiz-setup')}
+                                            rightIcon={<ArrowRight size={18} />}
+                                        >
+                                            Take a Quiz Now
+                                        </Button>
                                     </div>
                                 </Card>
                             </>
                         ) : (
-                            <Card style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
+                            <Card style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
                                 <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
-                                    <FileText size={48} style={{ opacity: 0.5, marginBottom: 'var(--space-4)' }} />
-                                    <p>Upload a resume to see<br />analysis results here.</p>
+                                    <FileSearch size={64} style={{ opacity: 0.3, marginBottom: 'var(--space-4)' }} />
+                                    <h3>Ready for Analysis</h3>
+                                    <p>Upload your resume to reveal insights<br />and unlock personalized quizzes.</p>
                                 </div>
                             </Card>
                         )}
                     </div>
                 </div>
             </div>
-            {/* Quick spinner animation logic added inline for simplicity since it's only one icon */}
             <style>
                 {`
                     @keyframes spin { 100% { transform: rotate(360deg); } }

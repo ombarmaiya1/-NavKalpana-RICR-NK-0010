@@ -3,98 +3,125 @@ import { useParams, useNavigate } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import quizService from '../../services/quizService';
+import { Award, RefreshCcw, LayoutDashboard, ChevronRight, Check, X } from 'lucide-react';
 import styles from './Quiz.module.css';
 
 export default function QuizResult() {
-    const { quizId } = useParams();
     const navigate = useNavigate();
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchResults = async () => {
-            try {
-                const data = await quizService.getResults(quizId);
-                setResult(data);
-            } catch (err) {
-                setError('Failed to load quiz results.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchResults();
-    }, [quizId]);
+        const storedResult = localStorage.getItem('lastQuizResult');
+        if (storedResult) {
+            setResult(JSON.parse(storedResult));
+        }
+        setLoading(false);
+    }, []);
 
     if (loading) {
         return (
             <MainLayout pageTitle="Quiz Result">
                 <div className={styles.loading}>
-                    <p>Calculating your score...</p>
+                    <p>Fetching your results...</p>
                 </div>
             </MainLayout>
         );
     }
 
-    if (error) {
+    if (!result) {
         return (
-            <MainLayout pageTitle="Quiz Result">
+            <MainLayout pageTitle="No Result">
                 <div className={styles.container}>
                     <Card variant="glass" padded>
-                        <p className={styles.errorText}>{error}</p>
-                        <Button variant="primary" onClick={() => navigate('/quiz-setup')}>Back to Setup</Button>
+                        <h2>No quiz results found.</h2>
+                        <Button variant="primary" onClick={() => navigate('/quiz-setup')}>Take a Quiz</Button>
                     </Card>
                 </div>
             </MainLayout>
         );
     }
 
+    const masteryChange = result.new_mastery - (result.old_mastery || 0);
+
     return (
-        <MainLayout pageTitle="Quiz Result">
+        <MainLayout pageTitle={`Results: ${result.topic}`}>
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <h1 className={styles.title}>Quiz Completed!</h1>
-                    <p className={styles.subtitle}>Here is how you performed in {result.topic}</p>
+                <div className={styles.resultHeader}>
+                    <div className={styles.awardIcon}>
+                        <Award size={64} color="var(--primary)" />
+                    </div>
+                    <h1 className={styles.title}>Assessment Completed!</h1>
+                    <p className={styles.subtitle}>You've taken another step towards mastery in <strong>{result.topic}</strong></p>
                 </div>
 
-                <Card className={styles.resultCard} variant="glass" padded>
-                    <div className={styles.stats}>
-                        <div className={styles.statItem}>
-                            <span className={styles.statLabel}>Score</span>
-                            <span className={styles.statValue}>{result.score}</span>
+                <div className={styles.resultGrid}>
+                    <Card className={styles.scoreCard} variant="glass" padded>
+                        <span className={styles.statLabel}>Accuracy</span>
+                        <div className={styles.circularProgress}>
+                            <span className={styles.statValue}>{Math.round(result.topic_accuracy)}%</span>
                         </div>
-                        <div className={styles.statItem}>
-                            <span className={styles.statLabel}>Percentage</span>
-                            <span className={styles.statValue}>{result.percentage}%</span>
+                        <p className={styles.statDetail}>{result.correct_answers} / {result.total_questions} Correct</p>
+                    </Card>
+
+                    <Card className={styles.masteryCard} variant="glass" padded>
+                        <span className={styles.statLabel}>Topic Mastery</span>
+                        <div className={styles.masteryValue}>
+                            <span className={styles.statValue}>{Math.round(result.new_mastery)}</span>
+                            <span className={styles.masteryMax}>/ 100</span>
                         </div>
-                    </div>
+                        <div className={`${styles.masteryChange} ${masteryChange >= 0 ? styles.positive : styles.negative}`}>
+                            {masteryChange >= 0 ? '+' : ''}{Math.round(masteryChange)} pts from last session
+                        </div>
+                    </Card>
+                </div>
 
-                    <div className={styles.feedbackBox}>
-                        <h3 className={styles.feedbackTitle}>Feedback</h3>
-                        <p className={styles.feedbackText}>{result.feedback}</p>
-                    </div>
+                <div className={styles.reviewSection}>
+                    <h2 className={styles.sectionTitle}>Review Questions</h2>
+                    <div className={styles.questionList}>
+                        {result.questions.map((q, idx) => {
+                            const isCorrect = Array.isArray(q.correct_answer)
+                                ? (Array.isArray(result.userAnswers[idx]) && result.userAnswers[idx].every(v => q.correct_answer.includes(v)))
+                                : result.userAnswers[idx] === q.correct_answer;
 
-                    <div className={styles.actions}>
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            fullWidth
-                            onClick={() => navigate('/quiz-setup')}
-                        >
-                            Retake Quiz
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            size="lg"
-                            fullWidth
-                            className={styles.mt1}
-                            onClick={() => navigate('/dashboard')}
-                        >
-                            Go to Dashboard
-                        </Button>
+                            return (
+                                <Card key={idx} className={styles.reviewItem} variant="glass">
+                                    <div className={styles.reviewHeader}>
+                                        {isCorrect ? <Check size={20} color="var(--success)" /> : <X size={20} color="var(--danger)" />}
+                                        <span className={styles.reviewIndex}>Question {idx + 1}</span>
+                                    </div>
+                                    <p className={styles.reviewQuestion}>{q.question}</p>
+                                    <div className={styles.reviewAnswer}>
+                                        <p><strong>Your Answer:</strong> <span className={isCorrect ? styles.correctText : styles.incorrectText}>{result.userAnswers[idx] || 'No Answer'}</span></p>
+                                        {!isCorrect && <p><strong>Correct Answer:</strong> <span className={styles.correctText}>{Array.isArray(q.correct_answer) ? q.correct_answer.join(', ') : q.correct_answer}</span></p>}
+                                    </div>
+                                    <div className={styles.explanationBox}>
+                                        <p><strong>Explanation:</strong> {q.explanation}</p>
+                                    </div>
+                                </Card>
+                            );
+                        })}
                     </div>
-                </Card>
+                </div>
+
+                <div className={styles.resultActions}>
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        leftIcon={<RefreshCcw size={18} />}
+                        onClick={() => navigate('/quiz-setup')}
+                    >
+                        New Assessment
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        size="lg"
+                        leftIcon={<LayoutDashboard size={18} />}
+                        onClick={() => navigate('/dashboard')}
+                    >
+                        Back to Dashboard
+                    </Button>
+                </div>
             </div>
         </MainLayout>
     );
