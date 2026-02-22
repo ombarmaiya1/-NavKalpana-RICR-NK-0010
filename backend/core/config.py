@@ -1,15 +1,33 @@
 import os
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     PROJECT_NAME: str = "FastAPI Authentication System"
-    # In production, this should be an environment variable
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "b3a4e9b9dbffb1b5f6a7d76b1f2b4c6e8f0a2d4c6e8b0a2d4c6e8b0a2d4c6e8b")
+
+    # ── JWT ─────────────────────────────────────────────────────────────────
+    SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    # ── Database ────────────────────────────────────────────────────────────
     DATABASE_URL: str = "sqlite:///./app.db"
+
+    # ── OpenAI ──────────────────────────────────────────────────────────────
+    OPENAI_API_KEY: str = ""   # Optional: leave empty to use rule-based analysis
 
     class Config:
         env_file = ".env"
+        env_file_encoding = "utf-8"
+
 
 settings = Settings()
+
+# ── Startup validation ───────────────────────────────────────────────────────
+# Warn (not crash) if the key is missing or placeholder so the app is still
+# usable with the rule-based fallback for resume analysis.
+if not settings.OPENAI_API_KEY or settings.OPENAI_API_KEY == "PASTE_YOUR_KEY_HERE":
+    print(
+        "[config] WARNING: OPENAI_API_KEY is not set in backend/.env. "
+        "Resume analysis will use rule-based scoring only."
+    )
