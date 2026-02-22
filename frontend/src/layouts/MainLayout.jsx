@@ -1,6 +1,13 @@
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
+import { LayoutDashboard, Mic, BookOpen } from 'lucide-react';
 import styles from './MainLayout.module.css';
+
+const DEFAULT_NAV = [
+    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
+    { label: 'Mock Interview', to: '/mock-interview', icon: <Mic size={18} /> },
+    { label: 'Adaptive Quiz', to: '/quiz-setup', icon: <BookOpen size={18} /> },
+];
 
 /**
  * MainLayout — Root shell for ACIE application
@@ -23,6 +30,9 @@ export default function MainLayout({
     actions,
     sidebarCollapsed = false,
 }) {
+    // If no navItems passed, use default ones
+    const finalNavItems = navItems.length > 0 ? navItems : DEFAULT_NAV;
+
     return (
         <div
             className={[
@@ -32,7 +42,7 @@ export default function MainLayout({
         >
             {/* Fixed sidebar */}
             <Sidebar
-                navItems={navItems}
+                navItems={finalNavItems}
                 collapsed={sidebarCollapsed}
             />
 

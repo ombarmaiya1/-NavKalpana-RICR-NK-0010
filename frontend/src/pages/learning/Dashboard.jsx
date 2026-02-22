@@ -4,6 +4,7 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { BookOpen, AlertTriangle, TrendingUp, Play, FileText, Activity } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Dashboard.module.css';
 
 const performanceData = [
@@ -28,6 +29,7 @@ const masteryTopics = [
 ];
 
 export default function Dashboard() {
+    const navigate = useNavigate();
     const getHeatmapColor = (percent) => {
         // Return an rgba value based on percentage
         // Low percent = more red/orange, High percent = more green/blue
@@ -94,7 +96,12 @@ export default function Dashboard() {
                             <span>Estimated Time:</span>
                             <span className={styles.statVal}>20 mins</span>
                         </div>
-                        <Button variant="primary" leftIcon={<Play size={18} />} fullWidth>
+                        <Button
+                            variant="primary"
+                            leftIcon={<Play size={18} />}
+                            fullWidth
+                            onClick={() => navigate('/quiz-setup')}
+                        >
                             Start Quiz
                         </Button>
                     </Card>

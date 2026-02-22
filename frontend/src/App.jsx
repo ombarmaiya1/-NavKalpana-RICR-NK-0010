@@ -6,6 +6,9 @@ import InterviewPage from './pages/interview/InterviewPage';
 import MockInterviewStart from './pages/interview/MockInterviewStart';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
+import QuizSetup from './pages/quiz/QuizSetup';
+import QuizSession from './pages/quiz/QuizSession';
+import QuizResult from './pages/quiz/QuizResult';
 import './index.css';
 
 /**
@@ -28,6 +31,11 @@ export default function App() {
           <Route path="/interview" element={<InterviewPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+
+          {/* Quiz Flow */}
+          <Route path="/quiz-setup" element={<QuizSetup />} />
+          <Route path="/quiz-session/:quizId" element={<QuizSession />} />
+          <Route path="/quiz-result/:quizId" element={<QuizResult />} />
 
           {/* 404 fallback → also goes to dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
