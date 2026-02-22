@@ -14,12 +14,14 @@ export default function Login() {
 
     const navigate = useNavigate();
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (isEmpty) return;
         setLoading(true);
         // Simulate network request — replace with real auth call
         await new Promise(r => setTimeout(r, 1500));
+        localStorage.setItem('token', 'mock-jwt-token-12345');
         setLoading(false);
         navigate('/dashboard');
     };

@@ -100,6 +100,24 @@ export default function Dashboard() {
                         </Button>
                     </Card>
 
+                    {/* SECTION 1.5: Assignments (New) */}
+                    <Card hoverable>
+                        <div className={styles.flexBetween}>
+                            <h3 className="text-secondary">Assignments</h3>
+                            <FileText className="text-primary" size={24} />
+                        </div>
+                        <p className={styles.textMuted} style={{ marginTop: 'var(--space-2)' }}>Check and complete your active assignments.</p>
+                        <div style={{ marginTop: 'auto', paddingTop: 'var(--space-4)' }}>
+                            <Button
+                                variant="primary"
+                                fullWidth
+                                onClick={() => navigate('/assignments')}
+                            >
+                                View Assignments
+                            </Button>
+                        </div>
+                    </Card>
+
                     {/* SECTION 3: Upcoming Adaptive Quiz */}
                     <Card hoverable>
                         <div className={styles.flexBetween} style={{ marginBottom: 'var(--space-2)' }}>
