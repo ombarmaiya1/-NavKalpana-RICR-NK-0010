@@ -128,7 +128,12 @@ export default function Dashboard() {
                             <span>Estimated Time:</span>
                             <span className={styles.statVal}>20 mins</span>
                         </div>
-                        <Button variant="primary" leftIcon={<Play size={18} />} fullWidth>
+                        <Button
+                            variant="primary"
+                            leftIcon={<Play size={18} />}
+                            fullWidth
+                            onClick={() => navigate('/quiz-setup')}
+                        >
                             Start Quiz
                         </Button>
                     </Card>
