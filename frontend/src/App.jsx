@@ -4,7 +4,6 @@ import Landing from './pages/landing/Landing';
 import Dashboard from './pages/learning/Dashboard';
 import ResumeAnalysis from './pages/learning/ResumeAnalysis';
 import LearningPage from './pages/learning/LearningPage';
-import TopicDetail from './pages/learning/TopicDetail';
 import AssignmentPage from './pages/assignments/AssignmentPage';
 import AssignmentDetail from './pages/assignments/AssignmentDetail';
 import InterviewPage from './pages/interview/InterviewPage';
@@ -34,7 +33,6 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/resume-analysis" element={<ResumeAnalysis />} />
           <Route path="/learning" element={<LearningPage />} />
-          <Route path="/learning/:topicId" element={<TopicDetail />} />
           <Route path="/assignments" element={<AssignmentPage />} />
           <Route path="/assignments/:assignmentId" element={<AssignmentDetail />} />
           <Route path="/mock-interview" element={<MockInterviewStart />} />

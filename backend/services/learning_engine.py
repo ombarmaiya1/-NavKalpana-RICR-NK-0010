@@ -6,7 +6,7 @@ def calculate_mastery(
     quiz_score: Optional[float],
     assignment_score: Optional[float],
     consistency: float
-) -> float:
+) -> Optional[float]:
     """Calculates weighted mastery score based on performance and activity."""
     
     if quiz_score is not None and assignment_score is not None:
@@ -16,18 +16,31 @@ def calculate_mastery(
     elif assignment_score is not None:
         mastery = (assignment_score * 0.60) + (consistency * 0.40)
     else:
-        mastery = consistency # Fallback if no scores yet
+        return None
         
     return round(min(100, max(0, mastery)), 2)
 
-def calculate_risk(mastery: float) -> str:
+def calculate_risk(mastery: Optional[float]) -> str:
     """Detects risk levels based on mastery score."""
+    if mastery is None:
+        return "Not Attempted"
     if mastery < 40:
         return "High Risk"
     elif mastery <= 70:
         return "Moderate"
     else:
         return "Strong"
+
+def get_topic_level(mastery: Optional[float]) -> str:
+    """Determines topic difficulty level based on mastery."""
+    if mastery is None:
+        return "Basic"
+    if mastery < 40:
+        return "Basic"
+    elif mastery <= 75:
+        return "Intermediate"
+    else:
+        return "Advanced"
 
 def adaptive_difficulty(last_three_scores: List[float]) -> str:
     """Determines difficulty scaling based on recent performance trend."""
@@ -147,4 +160,56 @@ async def generate_starter_plan(
             ],
             "mini_projects": ["Self-Assessment Project"],
             "revision_schedule": ["First diagnostic quiz"]
+        }
+
+async def fetch_internet_resources(topic: str, level: str) -> dict:
+    """Generates structured internet learning resources for a topic and difficulty level."""
+    
+    if level == "Basic":
+        search_intent = "beginner tutorial, getting started, fundamentals"
+    elif level == "Intermediate":
+        search_intent = "intermediate deep dive, best practices, architecture"
+    else:
+        search_intent = "advanced optimization, real world project, under the hood"
+        
+    system_prompt = (
+        "You are an expert technical resource curator.\n"
+        f"Generate high-quality learning resources for the topic '{topic}' at a '{level}' level.\n"
+        f"Search intent involves: {search_intent}.\n"
+        "Do NOT include spam links. Prefer official documentation and highly recognized platforms (YouTube, freeCodeCamp, MDN, official docs).\n"
+        "Return ONLY JSON with the structure:\n"
+        "{\n"
+        "  \"topic\": \"string\",\n"
+        "  \"level\": \"string\",\n"
+        "  \"resources\": {\n"
+        "    \"youtube\": [{\"title\": \"string\", \"url\": \"string\"}],\n"
+        "    \"documentation\": [{\"title\": \"string\", \"url\": \"string\"}],\n"
+        "    \"practice\": [{\"title\": \"string\", \"url\": \"string\"}],\n"
+        "    \"articles\": [{\"title\": \"string\", \"url\": \"string\"}]\n"
+        "  }\n"
+        "}\n"
+    )
+
+    try:
+        provider = get_ai_provider()
+        content = await provider.generate(system_prompt + "\n\nProvide real, standard URLs. Return ONLY JSON.")
+        
+        if content.startswith("```json"):
+            content = content[7:-3]
+        elif content.startswith("```"):
+            content = content[3:-3]
+            
+        return json.loads(content)
+    except Exception as e:
+        print(f"[learning_engine] AI Resource Fetch error: {str(e)}")
+        # Fallback to generic known good resources to prevent UI breakage
+        return {
+            "topic": topic,
+            "level": level,
+            "resources": {
+                "youtube": [{"title": f"{topic} Crash Course", "url": "https://youtube.com/results?search_query=" + topic.replace(' ', '+')}],
+                "documentation": [{"title": f"{topic} Official Docs", "url": "https://google.com/search?q=" + topic.replace(' ', '+') + "+official+documentation"}],
+                "practice": [{"title": f"Practice {topic}", "url": "https://google.com/search?q=practice+" + topic.replace(' ', '+')}],
+                "articles": [{"title": f"Understanding {topic}", "url": "https://medium.com/search?q=" + topic.replace(' ', '+')}]
+            }
         }

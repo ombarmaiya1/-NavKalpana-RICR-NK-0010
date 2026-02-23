@@ -185,3 +185,68 @@
     border-radius: var(--radius-lg);
     border: 1px dashed var(--border-color);
 }
+
+.emptyIcon {
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+}
+
+.sectionTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-4) 0;
+}
+
+.generateRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.topicSelect {
+    flex: 1;
+    min-width: 180px;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.topicSelect:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.difficulty {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.1rem 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--bg-hover);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.scoreRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) 0;
+}
+
+.successIcon {
+    color: var(--success);
+}
+
+.scoreText {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+}

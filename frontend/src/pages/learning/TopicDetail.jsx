@@ -6,6 +6,8 @@ import Button from '../../components/ui/Button';
 import { Layers, FileSearch, BookOpen, AlertCircle, Loader2, CheckCircle, Circle, Play } from 'lucide-react';
 import styles from './TopicDetail.module.css';
 
+import learningService from '../../services/learningService';
+
 export default function TopicDetail() {
     const { topicId } = useParams();
     const navigate = useNavigate();
@@ -16,33 +18,16 @@ export default function TopicDetail() {
     useEffect(() => {
         const fetchTopicDetail = async () => {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    navigate('/login');
-                    return;
+                const response = await learningService.getTopicDetail(topicId);
+
+                if (response && response.success) {
+                    setTopic(response.data);
+                } else {
+                    setError(response?.message || 'Failed to fetch topic details');
                 }
-
-                const response = await fetch(`/api/learning/topic/${topicId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (response.status === 401) {
-                    localStorage.removeItem('token');
-                    navigate('/login');
-                    return;
-                }
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch topic details');
-                }
-
-                const data = await response.json();
-                setTopic(data);
             } catch (err) {
                 console.error('Error fetching topic detail:', err);
-                setError(err.message || 'An error occurred while loading topic details.');
+                setError('An error occurred while loading topic details.');
             } finally {
                 setLoading(false);
             }
@@ -51,7 +36,7 @@ export default function TopicDetail() {
         if (topicId) {
             fetchTopicDetail();
         }
-    }, [topicId, navigate]);
+    }, [topicId]);
 
     return (
         <MainLayout pageTitle={topic ? topic.title : 'Topic Details'}>

@@ -4,6 +4,7 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { Mail, Lock, LogIn } from 'lucide-react';
 import styles from './Login.module.css';
+import authService from '../../services/authService';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -23,32 +24,22 @@ export default function Login() {
         setError('');
 
         try {
-            // POST to backend API (proxied to localhost:8000)
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                }),
+            const result = await authService.login({
+                email,
+                password
             });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.detail || 'Login failed. Invalid credentials.');
+            if (result && result.success) {
+                // Store the JWT
+                localStorage.setItem('token', result.data.access_token);
+                navigate('/dashboard');
+            } else {
+                setError(result?.message || 'Login failed. Invalid credentials.');
             }
-
-            const data = await response.json();
-
-            // Store the JWT
-            localStorage.setItem('token', data.access_token);
-            navigate('/dashboard');
 
         } catch (err) {
             console.error('Login error:', err);
-            setError(err.message || 'An error occurred during login. Please try again later.');
+            setError('An error occurred during login. Please try again later.');
         } finally {
             setLoading(false);
         }

@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button';
 import { FileText, AlertCircle, ArrowRight } from 'lucide-react';
 import quizService from '../../services/quizService';
 import styles from './Quiz.module.css';
+import { saveToStorage, getFromStorage } from '../../utils/storage';
 
 export default function QuizSetup() {
     const navigate = useNavigate();
@@ -17,14 +18,28 @@ export default function QuizSetup() {
 
     useEffect(() => {
         const fetchOptions = async () => {
+            // Load cached options immediately
+            const cached = getFromStorage('quiz_options');
+            if (cached) {
+                setOptions(cached);
+                if (cached.resume_topics?.length > 0) {
+                    setTopic(cached.mixed_quiz_name || cached.resume_topics[0]);
+                }
+                setLoading(false);
+            }
             try {
-                const data = await quizService.getOptions();
-                setOptions(data);
-                if (data.resume_topics && data.resume_topics.length > 0) {
-                    setTopic(data.mixed_quiz_name || data.resume_topics[0]);
+                const result = await quizService.getOptions();
+                if (result.success) {
+                    setOptions(result.data);
+                    saveToStorage('quiz_options', result.data);
+                    if (!cached && result.data.resume_topics?.length > 0) {
+                        setTopic(result.data.mixed_quiz_name || result.data.resume_topics[0]);
+                    }
+                } else if (!cached) {
+                    setError(result.message || 'Failed to load quiz options');
                 }
             } catch (err) {
-                setError('Failed to load quiz options. Please try again.');
+                if (!cached) setError('Failed to load quiz options. Please try again.');
             } finally {
                 setLoading(false);
             }
@@ -38,10 +53,13 @@ export default function QuizSetup() {
         setStarting(true);
         setError('');
         try {
-            const quizData = await quizService.startQuiz({ topic });
-            // Store quiz data in state or local storage for the session page
-            localStorage.setItem('currentQuiz', JSON.stringify(quizData));
-            navigate(`/quiz-session/${topic.replace(/\s+/g, '-').toLowerCase()}`);
+            const result = await quizService.generateQuiz(topic);
+            if (result.success) {
+                saveToStorage('current_quiz', result.data);
+                navigate(`/quiz-session/${topic.replace(/\s+/g, '-').toLowerCase()}`);
+            } else {
+                setError(result.message || 'Failed to generate quiz');
+            }
         } catch (err) {
             setError(err.message || 'Failed to generate quiz');
         } finally {

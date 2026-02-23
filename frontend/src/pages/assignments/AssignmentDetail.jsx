@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import { Layers, FileSearch, BookOpen, AlertCircle, Loader2, FileText, Calendar, CheckCircle, Clock, Link as LinkIcon, Upload } from 'lucide-react';
+import { AlertCircle, Loader2, CheckCircle, Clock, Link as LinkIcon, Upload } from 'lucide-react';
 import styles from './AssignmentDetail.module.css';
+import assignmentService from '../../services/assignmentService';
 
 export default function AssignmentDetail() {
     const { assignmentId } = useParams();
@@ -22,33 +23,15 @@ export default function AssignmentDetail() {
     useEffect(() => {
         const fetchAssignmentData = async () => {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    navigate('/login');
-                    return;
+                const result = await assignmentService.getAssignment(assignmentId);
+                if (result.success) {
+                    setAssignment(result.data);
+                } else {
+                    setError(result.message || 'Failed to fetch assignment details');
                 }
-
-                const response = await fetch(`/api/assignments/${assignmentId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (response.status === 401) {
-                    localStorage.removeItem('token');
-                    navigate('/login');
-                    return;
-                }
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch assignment details');
-                }
-
-                const data = await response.json();
-                setAssignment(data);
             } catch (err) {
                 console.error('Error fetching assignment detail:', err);
-                setError(err.message || 'An error occurred while loading assignment details.');
+                setError('An error occurred while loading assignment details.');
             } finally {
                 setLoading(false);
             }
@@ -57,7 +40,7 @@ export default function AssignmentDetail() {
         if (assignmentId) {
             fetchAssignmentData();
         }
-    }, [assignmentId, navigate]);
+    }, [assignmentId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -80,32 +63,24 @@ export default function AssignmentDetail() {
         setSubmitting(true);
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`/api/assignments/${assignmentId}/submit`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({ submissionLink })
-            });
+            const formData = new FormData();
+            formData.append('assignment_id', assignmentId);
+            formData.append('github_link', submissionLink);
 
-            if (!response.ok) {
-                throw new Error('Failed to submit assignment');
+            const result = await assignmentService.submitAssignment(assignmentId, formData);
+
+            if (result.success) {
+                setToastMessage('Assignment submitted and evaluated!');
+                setTimeout(() => setToastMessage(''), 3000);
+                setAssignment(prev => ({
+                    ...prev,
+                    status: 'graded',
+                    score: result.data?.score,
+                    submission: submissionLink
+                }));
+            } else {
+                setSubmitError(result.message || 'Submission failed');
             }
-
-            const data = await response.json();
-
-            // Show toast and update local state
-            setToastMessage('Assignment submitted successfully');
-            setTimeout(() => setToastMessage(''), 3000);
-
-            setAssignment(prev => ({
-                ...prev,
-                status: 'submitted',
-                submission: submissionLink
-            }));
-
         } catch (err) {
             setSubmitError(err.message || 'Submission failed. Please try again.');
         } finally {
@@ -164,13 +139,12 @@ export default function AssignmentDetail() {
 
                             <div className={styles.metaInfo}>
                                 <div className={styles.metaItem}>
-                                    <Calendar size={18} className={styles.metaIcon} />
-                                    <span>Due: {assignment.dueDate}</span>
+                                    <span className={styles.difficultyBadge}>{assignment.difficulty}</span>
                                 </div>
                                 {assignment.status === 'graded' && (
                                     <div className={styles.metaItemScore}>
                                         <CheckCircle size={18} className={styles.metaIconSuccess} />
-                                        <span>Score: {assignment.marks}/100</span>
+                                        <span>Score: {Math.round(assignment.score)}/100</span>
                                     </div>
                                 )}
                             </div>

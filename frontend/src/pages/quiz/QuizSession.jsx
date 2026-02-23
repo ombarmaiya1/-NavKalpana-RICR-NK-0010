@@ -21,7 +21,7 @@ export default function QuizSession() {
 
     useEffect(() => {
         // Load quiz data from localStorage set by QuizSetup
-        const storedQuiz = localStorage.getItem('currentQuiz');
+        const storedQuiz = localStorage.getItem('current_quiz');
         if (storedQuiz) {
             const parsed = JSON.parse(storedQuiz);
             setQuizData(parsed);
@@ -57,20 +57,24 @@ export default function QuizSession() {
                 }
             });
 
-            const result = await quizService.submitQuiz({
-                topic: quizData.topic,
-                correct_answers: correctCount,
-                total_questions: quizData.questions.length
-            });
+            const result = await quizService.submitQuiz(
+                quizData.topic,
+                correctCount,
+                quizData.questions.length
+            );
 
-            // Store result for the result page
-            localStorage.setItem('lastQuizResult', JSON.stringify({
-                ...result,
-                questions: quizData.questions,
-                userAnswers: selectedAnswers
-            }));
+            if (result.success) {
+                // Store result for the result page
+                localStorage.setItem('lastQuizResult', JSON.stringify({
+                    ...result.data,
+                    questions: quizData.questions,
+                    userAnswers: selectedAnswers
+                }));
 
-            navigate(`/quiz-result/${quizId}`);
+                navigate(`/quiz-result/${quizId}`);
+            } else {
+                setError(result.message || 'Failed to submit quiz results');
+            }
         } catch (err) {
             setError('Failed to submit quiz results. Please try again.');
         } finally {

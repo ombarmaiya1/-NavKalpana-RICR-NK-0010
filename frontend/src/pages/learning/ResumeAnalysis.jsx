@@ -48,13 +48,12 @@ export default function ResumeAnalysis() {
                 body: formData
             });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.detail || 'Analysis failed');
+            const result = await response.json();
+            if (result.success) {
+                setAnalysisResult(result.data);
+            } else {
+                setError(result.message || 'Analysis failed');
             }
-
-            const data = await response.json();
-            setAnalysisResult(data);
         } catch (err) {
             setError(err.message || 'An error occurred during analysis.');
         } finally {

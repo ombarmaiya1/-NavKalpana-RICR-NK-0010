@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Form, Request
 from pydantic import BaseModel
 from typing import List, Any, Optional
+from core.response_utils import success_response, error_response
 import fitz  # PyMuPDF
 from sqlalchemy.orm import Session
 from database import get_db
@@ -123,14 +124,4 @@ async def analyze_resume(
         + structure_score * 0.10
     )
 
-    response_payload = {
-        "resume_strength": resume_strength,
-        "skill_relevance": skill_relevance,
-        "project_depth": project_depth,
-        "experience_score": experience_score,
-        "structure_score": structure_score,
-        "missing_skills": ai_result.get("missing_skills", []),
-        "recommendations": ai_result.get("recommendations", []),
-        "extracted_topics": extracted_topics
-    }
-    return response_payload
+    return success_response(data=response_payload, message="Resume analyzed successfully")

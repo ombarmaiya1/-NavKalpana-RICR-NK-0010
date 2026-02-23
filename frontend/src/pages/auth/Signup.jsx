@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import { User, Mail, Lock, UserPlus } from 'lucide-react';
+import { User, Mail, Lock, UserPlus, FileText, Briefcase } from 'lucide-react';
 import styles from './Signup.module.css';
+import authService from '../../services/authService';
 
 export default function Signup() {
     const [name, setName] = useState('');
@@ -13,13 +14,13 @@ export default function Signup() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [role, setRole] = useState('');
+    const [file, setFile] = useState(null);
 
-    const isEmpty = !name.trim() || !email.trim() || !password.trim() || !confirm.trim();
     const mismatch = confirm.length > 0 && password !== confirm;
-    const isDisabled = isEmpty || mismatch;
+    const isDisabled = !name || !email || !password || mismatch;
 
     const navigate = useNavigate();
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,33 +30,26 @@ export default function Signup() {
         setSuccessMessage('');
 
         try {
-            const response = await fetch('/api/auth/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    name: name
-                }),
-            });
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('password', password);
+            if (role) formData.append('role', role);
+            if (file) formData.append('file', file);
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.detail || 'Signup failed. Please try again.');
+            const result = await authService.signup(formData);
+
+            if (result && result.success) {
+                setSuccessMessage("Account created successfully! Redirecting to login...");
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
+            } else {
+                setError(result?.message || 'Signup failed. Please try again.');
             }
-
-            // Optional: You could log them in immediately, or redirect to login.
-            setSuccessMessage("Account created successfully! Redirecting to login...");
-
-            setTimeout(() => {
-                navigate('/login');
-            }, 2000);
-
         } catch (err) {
             console.error('Signup error:', err);
-            setError(err.message || 'An error occurred during signup.');
+            setError('An error occurred during signup.');
         } finally {
             setLoading(false);
         }
@@ -141,24 +135,36 @@ export default function Signup() {
                             </div>
                         </div>
 
-                        {/* Confirm Password */}
+                        {/* Target Role (Optional) */}
                         <div className={styles.field}>
-                            <label className={styles.label} htmlFor="signup-confirm">Confirm Password</label>
-                            <div className={`${styles.inputWrap} ${mismatch ? styles.inputWrapError : ''}`}>
-                                <Lock className={styles.inputIcon} size={18} />
+                            <label className={styles.label} htmlFor="signup-role">Target Role (Optional)</label>
+                            <div className={styles.inputWrap}>
+                                <Briefcase className={styles.inputIcon} size={18} />
                                 <input
-                                    id="signup-confirm"
-                                    type="password"
-                                    className={`${styles.input} ${mismatch ? styles.inputError : ''}`}
-                                    placeholder="Repeat your password"
-                                    value={confirm}
-                                    onChange={e => setConfirm(e.target.value)}
-                                    autoComplete="new-password"
+                                    id="signup-role"
+                                    type="text"
+                                    className={styles.input}
+                                    placeholder="e.g. Frontend Developer"
+                                    value={role}
+                                    onChange={e => setRole(e.target.value)}
                                 />
                             </div>
-                            {mismatch && (
-                                <p className={styles.errorMsg}>Passwords do not match.</p>
-                            )}
+                        </div>
+
+                        {/* Resume Upload (Optional) */}
+                        <div className={styles.field}>
+                            <label className={styles.label} htmlFor="signup-resume">Resume (Optional PDF)</label>
+                            <div className={styles.inputWrap}>
+                                <FileText className={styles.inputIcon} size={18} />
+                                <input
+                                    id="signup-resume"
+                                    type="file"
+                                    accept=".pdf"
+                                    className={styles.input}
+                                    style={{ paddingTop: '10px' }}
+                                    onChange={e => setFile(e.target.files[0])}
+                                />
+                            </div>
                         </div>
 
                         {/* Submit */}

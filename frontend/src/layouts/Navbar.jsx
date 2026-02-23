@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '../components/ui/ThemeToggle';
 import { Settings as SettingsIcon, LogOut } from 'lucide-react';
 import styles from './Navbar.module.css';
+import { clearAppStorage } from '../utils/storage';
 
 /**
  * Navbar — Top bar for ACIE
@@ -50,7 +51,7 @@ export default function Navbar({ pageTitle = '', actions, collapsed = false }) {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        clearAppStorage();
         navigate('/login');
     };
 
