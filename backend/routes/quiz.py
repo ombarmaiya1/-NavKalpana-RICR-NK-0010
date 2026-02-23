@@ -5,6 +5,9 @@ from database import get_db
 from routes.auth import get_current_user
 from models.quiz import TopicMastery, QuizAttempt, UserResumeData
 from services.quiz_ai import generate_quiz
+from services.learning_engine import calculate_mastery
+from models.assignment import AssignmentSubmission
+from datetime import datetime, timedelta
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/quiz", tags=["Adaptive Quiz"])
@@ -105,23 +108,39 @@ async def submit_quiz(
     """Calculate score, update mastery, and record attempt."""
     score = (submission.correct_answers / submission.total_questions) * 100 if submission.total_questions > 0 else 0
     
-    # Update mastery logic
-    mastery = db.query(TopicMastery).filter(
-        TopicMastery.user_id == current_user.id,
-        TopicMastery.topic == submission.topic
-    ).first()
+    # Consistency Logic: Activities in last 7 days
+    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    recent_quizzes = db.query(QuizAttempt).filter(
+        QuizAttempt.user_id == current_user.id,
+        QuizAttempt.timestamp >= seven_days_ago
+    ).count()
+    recent_assignments = db.query(AssignmentSubmission).filter(
+        AssignmentSubmission.user_id == current_user.id,
+        AssignmentSubmission.submitted_at >= seven_days_ago
+    ).count()
+    consistency_score = min(100, (recent_quizzes + recent_assignments) * 10)
+
+    # Fetch latest assignment score for this topic if exists
+    from models.assignment import Assignment
+    latest_assignment = db.query(AssignmentSubmission).join(Assignment).filter(
+        AssignmentSubmission.user_id == current_user.id,
+        Assignment.topic == submission.topic
+    ).order_by(AssignmentSubmission.submitted_at.desc()).first()
+    
+    assignment_score = latest_assignment.score if latest_assignment else None
+
+    # Calculate and update mastery using Engine
+    new_mastery_score = calculate_mastery(score, assignment_score, consistency_score)
     
     if not mastery:
-        # First attempt
         mastery = TopicMastery(
             user_id=current_user.id,
             topic=submission.topic,
-            mastery_score=score
+            mastery_score=new_mastery_score
         )
         db.add(mastery)
     else:
-        # Mastery update formula: (old * 0.7) + (new * 0.3)
-        mastery.mastery_score = (mastery.mastery_score * 0.70) + (score * 0.30)
+        mastery.mastery_score = new_mastery_score
     
     # Record attempt
     attempt = QuizAttempt(

@@ -8,6 +8,7 @@ from routes.auth import get_current_user
 from models.quiz import TopicMastery, UserResumeData, QuizAttempt
 from models.assignment import Assignment, AssignmentSubmission
 from services.assignment_ai import generate_assignment, evaluate_submission
+from services.learning_engine import calculate_mastery
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/assignment", tags=["Hybrid Assignment"])
@@ -136,23 +137,16 @@ async def submit_assignment(
     )
     db.add(submission)
 
-    # Mastery Update Logic
-    # New Mastery = (Quiz Score × 0.50) + (Assignment Score × 0.30) + (Consistency × 0.20)
-    
-    mastery = db.query(TopicMastery).filter(
-        TopicMastery.user_id == current_user.id,
-        TopicMastery.topic == assignment.topic
-    ).first()
-
+    # Mastery Update Logic using Engine
     # Get latest quiz score for this topic
     latest_quiz = db.query(QuizAttempt).filter(
         QuizAttempt.user_id == current_user.id,
         QuizAttempt.topic == assignment.topic
     ).order_by(QuizAttempt.timestamp.desc()).first()
     
-    quiz_score = latest_quiz.score if latest_quiz else 0
+    quiz_score = latest_quiz.score if latest_quiz else None
     
-    # Consistency Logic: Count of attempts in the last 7 days
+    # Consistency Logic: Count of activities in the last 7 days
     from datetime import datetime, timedelta
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     recent_quizzes = db.query(QuizAttempt).filter(
@@ -163,25 +157,20 @@ async def submit_assignment(
         AssignmentSubmission.user_id == current_user.id,
         AssignmentSubmission.submitted_at >= seven_days_ago
     ).count()
-    consistency_score = min(100, (recent_quizzes + recent_assignments) * 10) # 10 points per activity, cap at 100
+    consistency_score = min(100, (recent_quizzes + recent_assignments) * 10)
+
+    # Calculate and update mastery
+    new_mastery_score = calculate_mastery(quiz_score, assignment_score, consistency_score)
 
     if not mastery:
-        # If no mastery exists yet (shouldn't happen if they generated assignment, but safe-guard)
-        # Use simpler formula: mastery = assignment_score × 0.6
         mastery = TopicMastery(
             user_id=current_user.id,
             topic=assignment.topic,
-            mastery_score=assignment_score * 0.6
+            mastery_score=new_mastery_score
         )
         db.add(mastery)
     else:
-        if latest_quiz:
-            new_mastery = (quiz_score * 0.50) + (assignment_score * 0.30) + (consistency_score * 0.20)
-        else:
-            # Fallback if no quiz exists: mastery = assignment_score × 0.6 (per user request)
-            new_mastery = assignment_score * 0.6
-        
-        mastery.mastery_score = new_mastery
+        mastery.mastery_score = new_mastery_score
 
     db.commit()
     db.refresh(submission)

@@ -87,13 +87,20 @@ async def analyze_resume(
 
     # Save extracted topics to DB for Adaptive Quiz
     extracted_topics = ai_result.get("extracted_topics", [])
-    if extracted_topics:
+    suggested_topics = ai_result.get("suggested_learning_topics", [])
+    if extracted_topics or suggested_topics:
         user_resume = db.query(UserResumeData).filter(UserResumeData.user_id == current_user.id).first()
         if user_resume:
             user_resume.topics = extracted_topics
+            user_resume.suggested_topics = suggested_topics
             user_resume.role = role
         else:
-            new_resume_data = UserResumeData(user_id=current_user.id, role=role, topics=extracted_topics)
+            new_resume_data = UserResumeData(
+                user_id=current_user.id, 
+                role=role, 
+                topics=extracted_topics,
+                suggested_topics=suggested_topics
+            )
             db.add(new_resume_data)
         db.commit()
 

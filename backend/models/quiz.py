@@ -34,6 +34,7 @@ class UserResumeData(Base):
     user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
     role = Column(String, nullable=True)
     topics = Column(JSON, nullable=False)  # Store list of extracted topics
+    suggested_topics = Column(JSON, nullable=True)  # Store list of AI recommended topics
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
 
     user = relationship("User")

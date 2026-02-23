@@ -19,7 +19,8 @@ async def analyze_resume_with_ai(resume_text: str, role: str):
         "  structure_score: int (0-100),\n"
         "  missing_skills: array,\n"
         "  recommendations: array,\n"
-        "  extracted_topics: array (e.g., ['FastAPI', 'React', 'Docker'])\n"
+        "  extracted_topics: array (e.g., ['FastAPI', 'React', 'Docker']),\n"
+        "  suggested_learning_topics: array (e.g., ['Microservices', 'GraphQL', 'Redux'])\n"
         "}\n"
     )
     try:
@@ -60,5 +61,6 @@ async def analyze_resume_with_ai(resume_text: str, role: str):
                 "Add more detail to your projects section to show deep architectural understanding.",
                 "Ensure your LinkedIn profile is up to date and linked in the header."
             ],
-            "extracted_topics": ["Python", "JavaScript", "React", "SQL", "Git", "REST APIs"]
+            "extracted_topics": ["Python", "JavaScript", "React", "SQL", "Git", "REST APIs"],
+            "suggested_learning_topics": ["Docker", "Kubernetes", "AWS", "CI/CD", "Redis"]
         }
