@@ -1,0 +1,32 @@
+﻿python : INFO:     Will 
+watch for changes in these 
+directories: ['C:\\Users\\o
+mbar\\-NavKalpana-RICR-NK-0
+010-2\\backend']
+At line:1 char:1
++ python -m uvicorn 
+main:app --reload > 
+server_out.log 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo         
+     : NotSpecified: (INF  
+  O:     Will ...10-2\\b   
+ ackend']:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+INFO:     Uvicorn running 
+on http://127.0.0.1:8000 
+(Press CTRL+C to quit)
+INFO:     Started reloader 
+process [10672] using 
+StatReload
+INFO:     Started server 
+process [18968]
+INFO:     Waiting for 
+application startup.
+INFO:     Application 
+startup complete.

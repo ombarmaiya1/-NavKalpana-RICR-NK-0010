@@ -1,26 +1,26 @@
 .dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-    padding: var(--space-4);
-    max-width: 1200px;
-    margin: 0 auto;
+    padding-bottom: var(--space-12);
 }
 
 .header {
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-8);
 }
 
 .welcomeTitle {
     font-size: 2rem;
-    color: var(--text-primary);
-    margin-bottom: var(--space-2);
+    font-weight: 700;
+    margin-bottom: var(--space-1);
+    background: linear-gradient(135deg, var(--text-main), var(--primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .topGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--space-6);
+    margin-bottom: var(--space-8);
 }
 
 .flexBetween {
@@ -31,106 +31,123 @@
 
 .scoreVal {
     font-size: 3rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin: var(--space-2) 0;
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.badgeMedium {
-    background: color-mix(in srgb, var(--warning) 15%, transparent);
-    color: var(--warning);
-}
-
-.badgeHigh {
-    background: color-mix(in srgb, var(--danger) 15%, transparent);
-    color: var(--danger);
-    margin-right: var(--space-2);
-    margin-bottom: var(--space-2);
-}
-
-.textMuted {
-    color: var(--text-muted);
-    font-size: 0.875rem;
-    margin-bottom: var(--space-4);
+    font-weight: 800;
+    margin: var(--space-4) 0;
+    color: var(--brand);
 }
 
 .statRow {
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--space-2);
-    color: var(--text-secondary);
+    font-size: 0.875rem;
 }
 
 .statVal {
-    color: var(--text-primary);
     font-weight: 600;
+    color: var(--text-main);
+}
+
+.badge {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.badgeLow {
+    background: rgba(var(--success-rgb), 0.1);
+    color: var(--success);
+}
+
+.badgeMedium {
+    background: rgba(var(--warning-rgb), 0.1);
+    color: var(--warning);
+}
+
+.badgeHigh {
+    background: rgba(var(--danger-rgb), 0.1);
+    color: var(--danger);
+}
+
+.bottomGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-6);
+}
+
+@media (max-width: 1024px) {
+    .bottomGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chartContainer {
+    height: 300px;
+    margin-top: var(--space-6);
 }
 
 .topicList {
     display: flex;
     flex-wrap: wrap;
+    gap: var(--space-2);
     margin-top: var(--space-4);
 }
 
 .heatmapGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: var(--space-3);
     margin-top: var(--space-4);
 }
 
 .heatmapItem {
-    padding: var(--space-4) var(--space-2);
+    padding: var(--space-3);
     border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-primary);
-    font-weight: 600;
-    text-align: center;
-    transition: var(--transition-normal);
-    min-height: 100px;
+    gap: var(--space-1);
+    transition: transform 0.2s;
 }
 
 .heatmapItem:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
 }
 
 .heatmapTopic {
-    font-size: 0.875rem;
-    margin-bottom: var(--space-1);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .heatmapPercent {
-    font-size: 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: #fff;
 }
 
-.chartContainer {
-    width: 100%;
-    height: 300px;
-    margin-top: var(--space-4);
+.centerState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: var(--space-4);
+    color: var(--text-muted);
 }
 
-.bottomGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-}
-
-@media (min-width: 900px) {
-    .bottomGrid {
-        grid-template-columns: 1fr 1fr;
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
 }

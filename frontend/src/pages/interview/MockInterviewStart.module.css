@@ -1,0 +1,339 @@
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+/* SECTION 1: Header */
+.header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* SECTION 2: Setup */
+.setupCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.select {
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: var(--transition-fast);
+  outline: none;
+  cursor: pointer;
+}
+
+.select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.radioGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .radioGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  background: var(--bg-primary);
+}
+
+.radioLabel:hover {
+  background: var(--border-color);
+  border-color: var(--border-color-hover);
+}
+
+.radioLabel:has(input:checked) {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.radioInput {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.radioText {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.actionRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-color);
+}
+
+@media (min-width: 640px) {
+  .actionRow {
+    flex-direction: row;
+  }
+}
+
+.durationBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  background: var(--card-bg);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+}
+
+.durationBadge strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.startIcon {
+  margin-right: var(--space-2);
+}
+
+.startBtn {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .startBtn {
+    width: auto;
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+}
+
+/* SECTION 3: Summary */
+.summarySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .metricsGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  transition: var(--transition-normal);
+}
+
+.metricCard:hover {
+  border-color: var(--border-color-hover);
+  transform: translateY(-2px);
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metricValue {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.metricValueLarge {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.metricValueWarning {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--warning);
+}
+
+.iconTech {
+  color: var(--text-secondary);
+}
+
+.iconComm {
+  color: var(--text-secondary);
+}
+
+.iconConf {
+  color: var(--warning);
+}
+
+.iconTips {
+  color: var(--success);
+}
+
+.metricCardReadiness {
+  background: var(--card-bg);
+  border: 2px solid var(--primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.metricCardReadiness::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 64px;
+  height: 64px;
+  background: rgba(59, 130, 246, 0.1);
+  border-bottom-left-radius: 100%;
+}
+
+.metricLabelReadiness {
+  font-size: 0.875rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 1;
+}
+
+.metricValueReadiness {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--primary);
+  z-index: 1;
+}
+
+/* SECTION 4: Tips */
+.tipsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-top: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .tipsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tipItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.tipNumber {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.tipText {
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
