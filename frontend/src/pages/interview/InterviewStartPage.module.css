@@ -1,0 +1,124 @@
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.uploadBox {
+  border-radius: 0.75rem;
+  border: 1px dashed var(--border-subtle);
+  padding: 1rem;
+  background: var(--bg-elevated);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.uploadHint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.fileInfo {
+  font-size: 0.85rem;
+}
+
+.inlineFields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.input,
+.select,
+.textarea {
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-elevated);
+  color: inherit;
+}
+
+.helper {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+}
+
+.quotaCard {
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.quotaTitle {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.quotaText {
+  font-size: 0.95rem;
+}
+
+.quotaHint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.quotaActions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+

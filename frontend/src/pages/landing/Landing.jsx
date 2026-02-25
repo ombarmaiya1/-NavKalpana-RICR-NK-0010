@@ -224,17 +224,17 @@ export default function Landing() {
                             <p className={styles.sectionSub}>From sign-up to interview-ready in three steps.</p>
                         </div>
                         <div className={styles.stepsRow}>
-                            {STEPS.map((s, i) => (
-                                <>
-                                    <div key={s.n} className={styles.stepCard}>
-                                        <div className={styles.stepNum}>{s.n}</div>
-                                        <div className={styles.stepIcon}>{s.icon}</div>
-                                        <h3 className={styles.stepTitle}>{s.title}</h3>
-                                        <p className={styles.stepDesc}>{s.desc}</p>
-                                    </div>
-                                    {i < STEPS.length - 1 && <div key={`line-${i}`} className={styles.stepLine} />}
-                                </>
-                            ))}
+                            {STEPS.map((s, i) => [
+                                <div key={s.n} className={styles.stepCard}>
+                                    <div className={styles.stepNum}>{s.n}</div>
+                                    <div className={styles.stepIcon}>{s.icon}</div>
+                                    <h3 className={styles.stepTitle}>{s.title}</h3>
+                                    <p className={styles.stepDesc}>{s.desc}</p>
+                                </div>,
+                                i < STEPS.length - 1 && (
+                                    <div key={`line-${i}`} className={styles.stepLine} />
+                                ),
+                            ])}
                         </div>
                     </div>
                 </section>
@@ -301,7 +301,7 @@ export default function Landing() {
                                 <Link to="/login" className={styles.footerLink}>Login</Link>
                                 <Link to="/signup" className={styles.footerLink}>Sign Up</Link>
                                 <Link to="/dashboard" className={styles.footerLink}>Dashboard</Link>
-                                <Link to="/interview" className={styles.footerLink}>Mock Interview</Link>
+                                <Link to="/start-interview" className={styles.footerLink}>AI Interview</Link>
                             </div>
                             <div className={styles.footerCol}>
                                 <div className={styles.footerColTitle}>Resources</div>

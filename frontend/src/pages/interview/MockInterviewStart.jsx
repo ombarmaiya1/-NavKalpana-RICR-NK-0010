@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -6,6 +7,12 @@ import { Target, Clock, BrainCircuit, MessageSquare, AlertCircle, CheckCircle } 
 import styles from './MockInterviewStart.module.css';
 
 const MockInterviewStart = () => {
+    const navigate = useNavigate();
+
+    const handleStart = () => {
+        navigate('/interview');
+    };
+
     return (
         <MainLayout>
             <div className={styles.container}>
@@ -66,7 +73,13 @@ const MockInterviewStart = () => {
                                 <Clock className={styles.startIcon} size={20} />
                                 <span>Estimated Duration: <strong>45 minutes</strong></span>
                             </div>
-                            <Button variant="primary" size="lg" className={styles.startBtn} leftIcon={<Target size={20} />}>
+                            <Button
+                                variant="primary"
+                                size="lg"
+                                className={styles.startBtn}
+                                leftIcon={<Target size={20} />}
+                                onClick={handleStart}
+                            >
                                 Start Interview
                             </Button>
                         </div>

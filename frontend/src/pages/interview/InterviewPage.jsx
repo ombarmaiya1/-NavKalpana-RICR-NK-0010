@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MainLayout from '../../layouts/MainLayout';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { Play, ChevronRight, Clock, Zap, BookOpen, Brain } from 'lucide-react';
 import styles from './InterviewPage.module.css';
+import { interviewService } from '../../services/interviewService';
 
 /* ─── Mock questions per interview type ─────────────────────────── */
 const QUESTIONS = {
@@ -38,6 +39,14 @@ export default function InterviewPage() {
     const [answer, setAnswer] = useState('');
     const [timeLeft, setTimeLeft] = useState(0);
 
+    // Voice interview state
+    const [isRecording, setIsRecording] = useState(false);
+    const [isSubmittingVoice, setIsSubmittingVoice] = useState(false);
+    const [voiceError, setVoiceError] = useState('');
+    const [aiFeedback, setAiFeedback] = useState(null);
+    const mediaRecorderRef = useRef(null);
+    const chunksRef = useRef([]);
+
     const questions = QUESTIONS[selectedType] ?? QUESTIONS.Technical;
 
     /* Timer */
@@ -67,6 +76,71 @@ export default function InterviewPage() {
         setInterviewStarted(true);
     };
 
+    const handleStartRecording = async () => {
+        setVoiceError('');
+        setAiFeedback(null);
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            chunksRef.current = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    chunksRef.current.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = async () => {
+                const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+                chunksRef.current = [];
+
+                const formData = new FormData();
+                formData.append('audio', blob, 'answer.webm');
+                formData.append('question', questions[currentQuestion]);
+
+                setIsSubmittingVoice(true);
+                try {
+                    const result = await interviewService.sendVoiceAnswer(formData);
+                    if (result?.success) {
+                        setAiFeedback(result.data);
+                    } else {
+                        const rawError = result?.data?.error || '';
+                        const isQuotaError =
+                            typeof rawError === 'string' &&
+                            rawError.toLowerCase().includes('insufficient_quota');
+
+                        if (isQuotaError) {
+                            setVoiceError(
+                                'Our AI mic evaluator has hit its API quota. Your recording was received but could not be scored. Try again later or switch to written answers.'
+                            );
+                        } else {
+                            setVoiceError(result?.message || 'Failed to get AI feedback.');
+                        }
+                    }
+                } catch (err) {
+                    setVoiceError(err.message || 'Failed to send audio to server.');
+                } finally {
+                    setIsSubmittingVoice(false);
+                }
+            };
+
+            mediaRecorderRef.current = mediaRecorder;
+            mediaRecorder.start();
+            setIsRecording(true);
+        } catch (err) {
+            setVoiceError('Could not access microphone. Please check browser permissions.');
+        }
+    };
+
+    const handleStopRecording = () => {
+        const recorder = mediaRecorderRef.current;
+        if (recorder && recorder.state !== 'inactive') {
+            recorder.stop();
+            recorder.stream.getTracks().forEach((t) => t.stop());
+        }
+        setIsRecording(false);
+    };
+
     const handleSubmit = () => {
         if (!answer.trim()) {
             alert('Please write your answer before saving.');
@@ -89,6 +163,15 @@ export default function InterviewPage() {
     return (
         <MainLayout pageTitle="AI Mock Interview">
             <div className={styles.page}>
+
+                {/* Banner: demo-only notice */}
+                <div className={styles.demoBanner}>
+                    <p>
+                        This page uses <strong>static demo questions only</strong>. For a full AI-driven interview
+                        based on your resume and target role, use the{' '}
+                        <strong>AI Interview</strong> entry in the sidebar or go to <code>/start-interview</code>.
+                    </p>
+                </div>
 
                 {/* ── Hero ──────────────────────────────────────────── */}
                 {!interviewStarted && (
@@ -216,6 +299,41 @@ export default function InterviewPage() {
                             value={answer}
                             onChange={e => setAnswer(e.target.value)}
                         />
+
+                        {/* Voice controls */}
+                        <div className={styles.voiceControls}>
+                            <div className={styles.voiceButtons}>
+                                {!isRecording ? (
+                                    <Button variant="secondary" onClick={handleStartRecording}>
+                                        Use microphone for this answer
+                                    </Button>
+                                ) : (
+                                    <Button variant="secondary" onClick={handleStopRecording}>
+                                        Stop &amp; send to AI
+                                    </Button>
+                                )}
+                                {isSubmittingVoice && (
+                                    <span className={styles.voiceStatus}>Processing your answer with AI…</span>
+                                )}
+                            </div>
+                            {voiceError && (
+                                <p className={styles.voiceError}>{voiceError}</p>
+                            )}
+                            {aiFeedback && (
+                                <div className={styles.feedbackBox}>
+                                    {aiFeedback.transcript && (
+                                        <p className={styles.feedbackTranscript}>
+                                            <strong>Your answer (transcribed):</strong> {aiFeedback.transcript}
+                                        </p>
+                                    )}
+                                    {aiFeedback.feedback && (
+                                        <p className={styles.feedbackText}>
+                                            <strong>AI feedback:</strong> {aiFeedback.feedback}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
 
                         {/* Actions */}
                         <div className={styles.actions}>
