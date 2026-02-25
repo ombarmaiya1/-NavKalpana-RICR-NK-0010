@@ -263,10 +263,6 @@ export default function Dashboard() {
                 </div>
 
             </div>
-            <style jsx>{`
-                .spin { animation: spin 2s linear infinite; }
-                @keyframes spin { 100% { transform: rotate(360deg); } }
-            `}</style>
         </MainLayout>
     );
 }

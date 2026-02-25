@@ -7,7 +7,7 @@ const DEFAULT_NAV = [
     { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
     { label: 'Learning', to: '/learning', icon: <BookOpen size={18} /> },
     { label: 'Assignments', to: '/assignments', icon: <FileText size={18} /> },
-    { label: 'Mock Interview', to: '/mock-interview', icon: <Mic size={18} /> },
+    { label: 'AI Interview', to: '/start-interview', icon: <Mic size={18} /> },
     { label: 'Adaptive Quiz', to: '/quiz-setup', icon: <Activity size={18} /> },
 ];
 
